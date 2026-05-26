@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:gravity="center"
+    android:background="#F5F5F5">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="श्री भट्टारक यश कीर्ति दिगम्बर जैन धर्मार्थ ट्रस्ट गुरुकुल ऋषभदेव
+जिला-उदयपुर (राजस्थान) पिन कोड : 313802"
+        android:textSize="18sp"
+
+        android:textAlignment="center"
+        android:textColor="@color/primary"
+
+        />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayout"
+        style="@style/StyledTextInputLayout"
+        android:layout_marginTop="25dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Username"
+        app:passwordToggleTint="@color/primary">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etUsername"
+
+            style="@style/StyledEditText"
+            android:inputType="textEmailAddress" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/etPassword"
+        style="@style/StyledTextInputLayout"
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Password"
+        app:passwordToggleEnabled="true"
+        app:passwordToggleTint="@color/primary">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/passwordEditText"
+            style="@style/StyledEditText"
+            android:inputType="textPassword" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <Button
+        android:id="@+id/btnLogin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Login"
+        android:layout_marginTop="25dp"
+        android:textSize="16sp"
+        android:padding="16dp"
+        android:backgroundTint="@color/primary"
+        android:layout_marginBottom="12dp" />
+
+
+
+</LinearLayout>
+

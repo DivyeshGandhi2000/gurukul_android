@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="NONE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="81716f71-177b-4dc0-af1b-a4a37b9080e4" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/gurukul/Utils/VideoGenerator.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/res/drawable/bg_icon_download.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/res/drawable/datebar_gradient.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/res/drawable/devandra_ji_new.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/res/drawable/ic_cake.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/res/drawable/ic_diya.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/res/drawable/ic_favorite.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/res/drawable/ic_prayer.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/res/drawable/ic_star.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/res/drawable/icone_profile.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/res/drawable/imagebg.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/res/drawable/new1.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/res/drawable/new_2.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/res/drawable/new_3.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/res/drawable/new_6.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/res/drawable/occasion_label_bg.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/res/drawable/outline_arrow_downward_24.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/res/drawable/rounded_border_new.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/res/drawable/sundar_ji_new.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/res/drawable/sundarji.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/res/drawable/sureshji.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/res/drawable/sureshji_new.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/res/layout/item_statusnew_xml.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/res/layout/item_video_new_xml.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/deploymentTargetSelector.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/deploymentTargetSelector.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/gurukul/AddStatusActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gurukul/AddStatusActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/gurukul/DatabaseHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gurukul/DatabaseHelper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/gurukul/Fragments/SettingsFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gurukul/Fragments/SettingsFragment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/gurukul/StatusAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gurukul/StatusAdapter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/layout/activity_add_status.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/activity_add_status.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/layout/fragment_settings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/fragment_settings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/layout/item_status.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/item_status.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/layout/item_status_xml.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/layout/item_status_xml.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/menu/bottom_nav_menu.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/menu/bottom_nav_menu.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/menu/menu_main.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/menu/menu_main.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/values/strings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/values/styles.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/res/values/styles.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../settings.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/../settings.gradle.kts" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 6
+}]]></component>
+  <component name="ProjectId" id="3DyhipIMXgG0QxbUqrAom4CUKUF" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.readMode.enableVisualFormatting": "true",
+    "android.gradle.sync.needed": "true",
+    "cf.first.check.clang-format": "false",
+    "cidr.known.project.marker": "true",
+    "git-widget-placeholder": "dev",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "D:/practice/Gurukul_android/app"
+  }
+}]]></component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="81716f71-177b-4dc0-af1b-a4a37b9080e4" name="Changes" comment="" />
+      <created>1779260347188</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1779260347188</updated>
+    </task>
+    <servers />
+  </component>
+</project>
