@@ -2,7 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:background="@drawable/imagebg"
+    android:background="@drawable/bg_new_2"
     android:alpha="1"
     android:id="@+id/mainFrame"
     android:layout_height="match_parent"
@@ -26,7 +26,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="10dp">
+                android:padding="12dp">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -167,8 +167,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="Discription"
-                    android:textStyle="bold"
-                    android:textColor="#0891b2"
+                    android:textColor="#8B0000"
                     android:textSize="14sp" />
             </LinearLayout>
 
@@ -178,8 +177,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:layout_marginHorizontal="5dp"
-                android:background="@drawable/datebar_gradient"
+                android:background="@drawable/datebar_gradient_new"
                 android:orientation="vertical"
+
                 android:padding="10dp">
 
                 <TextView
@@ -237,9 +237,10 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="+91-8233199334 ,+91-9785037808"
-                    android:textColor="#0891b2"
+                    android:textColor="#8B0000"
                     android:textSize="14sp"
                     android:textStyle="bold" />
+
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -253,7 +254,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="4dp"
                         android:layout_weight="1"
-                        android:background="@drawable/rounded_border_new"
+                        android:background="@drawable/rounded_border_new2"
                         android:gravity="center"
 
                         android:orientation="vertical"
@@ -263,7 +264,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="श्री देवेंद्र छाप्या"
-                            android:textColor="#0891b2"
+                            android:textColor="#8B0000"
                             android:textSize="10sp"
                             android:textStyle="bold" />
 
@@ -281,7 +282,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="4dp"
                         android:layout_weight="1"
-                        android:background="@drawable/rounded_border_new"
+                        android:background="@drawable/rounded_border_new2"
                         android:gravity="center"
                         android:orientation="vertical"
                         android:padding="8dp">
@@ -290,7 +291,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="श्री सुरेश कोठारी"
-                            android:textColor="#0891b2"
+                            android:textColor="#8B0000"
                             android:id="@+id/tvViceRole"
                             android:textSize="10sp"
                             android:textStyle="bold" />
@@ -308,7 +309,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="4dp"
                         android:layout_weight="1"
-                        android:background="@drawable/rounded_border_new"
+                        android:background="@drawable/rounded_border_new2"
                         android:gravity="center"
                         android:orientation="vertical"
                         android:padding="8dp">
@@ -317,7 +318,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="श्री सुंदर भाणावत"
-                            android:textColor="#0891b2"
+                            android:textColor="#8B0000"
                             android:textSize="10sp"
                             android:textStyle="bold" />
 
@@ -352,7 +353,7 @@
                         android:layout_height="wrap_content"
 
                         android:text="www.gurukul-rishabhdeo.com"
-                        android:textColor="#0891b2"
+                        android:textColor="#8B0000"
                         android:textSize="14sp"
                         android:textStyle="bold" />
 

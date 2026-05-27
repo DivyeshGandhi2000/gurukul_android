@@ -175,6 +175,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
+                    android:textStyle="bold"
                     android:text="Discription"
                     android:textColor="#0891b2"
                     android:textSize="14sp" />

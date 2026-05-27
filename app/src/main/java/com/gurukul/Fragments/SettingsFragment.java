@@ -30,11 +30,9 @@ public class SettingsFragment extends Fragment {
 
         SharedPreferences prefs =
                 requireContext().getSharedPreferences("AppPrefs", Context.MODE_PRIVATE);
-
-        // ── Template selection ─────────────────────────────────────
         RadioGroup templateGroup = view.findViewById(R.id.templateGroup);
 
-        // Restore saved template selection
+
         String currentTemplate = prefs.getString("template", "classic");
         switch (currentTemplate) {
             case "modern": templateGroup.check(R.id.radioModern); break;
@@ -52,10 +50,8 @@ public class SettingsFragment extends Fragment {
             Toast.makeText(getContext(), "Template Updated", Toast.LENGTH_SHORT).show();
         });
 
-        // ── Font Family selection ──────────────────────────────────
         RadioGroup fontGroup = view.findViewById(R.id.fontGroup);
 
-        // Restore saved font selection
         String currentFont = prefs.getString("font_family", "default");
         switch (currentFont) {
             case "serif":      fontGroup.check(R.id.fontSerif);      break;
@@ -72,7 +68,23 @@ public class SettingsFragment extends Fragment {
             prefs.edit().putString("font_family", fontChoice).apply();
             Toast.makeText(getContext(), "Font Updated", Toast.LENGTH_SHORT).show();
         });
+        RadioGroup videoColorGroup = view.findViewById(R.id.videoColorGroup);
+
+        String currentVideoColor = prefs.getString("video_color", "blue");
+        switch (currentVideoColor) {
+            case "brown": videoColorGroup.check(R.id.radioVideoBrown); break;
+            case "blue":
+            default:      videoColorGroup.check(R.id.radioVideoBlue);  break;
+        }
+
+        videoColorGroup.setOnCheckedChangeListener((g, checkedId) -> {
+            String colorChoice = "blue";
+            if (checkedId == R.id.radioVideoBrown) colorChoice = "brown";
+            prefs.edit().putString("video_color", colorChoice).apply();
+            Toast.makeText(getContext(), "Video Color Updated", Toast.LENGTH_SHORT).show();
+        });
 
         return view;
+
     }
 }

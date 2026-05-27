@@ -98,5 +98,37 @@
 
         </RadioGroup>
 
+        <!-- New Video Color Selection Section -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Select Video Color"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"/>
+
+        <RadioGroup
+            android:id="@+id/videoColorGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RadioButton
+                android:id="@+id/radioVideoBlue"
+                android:layout_width="match_parent"
+                style="@style/CustomRadioButton"
+                android:layout_height="wrap_content"
+                android:text="Blue"
+                android:checked="true" />
+
+            <RadioButton
+                android:id="@+id/radioVideoBrown"
+                android:layout_width="match_parent"
+                style="@style/CustomRadioButton"
+                android:layout_height="wrap_content"
+                android:text="Brown" />
+
+        </RadioGroup>
+
     </LinearLayout>
 </ScrollView>

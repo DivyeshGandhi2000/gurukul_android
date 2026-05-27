@@ -6,6 +6,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -25,6 +26,7 @@ import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.gurukul.Utils.VideoGenerator;
+import com.gurukul.Utils.VideoGeneratorNew;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -112,37 +114,73 @@ public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.ViewHolder
             progressDialog.setCancelable(false);
             progressDialog.show();
 
-            VideoGenerator.createAnimatedVideo(context, status, new VideoGenerator.VideoGenerationCallback() {
+            // 1. Get the selected video color from SharedPreferences
+            SharedPreferences prefs = context.getSharedPreferences("AppPrefs", Context.MODE_PRIVATE);
+            // Default to "blue" if the user hasn't selected anything yet
+            String videoColor = prefs.getString("video_color", "blue");
 
-                @Override
-                public void onProgress(int percentage) {
-                    ((Activity) context).runOnUiThread(() -> {
-                        progressDialog.setProgress(percentage);
-                        progressDialog.setMessage("Rendering frame " + percentage + "%");
-                    });
-                }
+            // 2. Check which color was selected and run the appropriate generator
+            if ("brown".equals(videoColor)) {
 
-                @Override
-                public void onFinished(File videoFile) {
-                    ((Activity) context).runOnUiThread(() -> {
-                        progressDialog.dismiss();
-                        shareVideo(context, videoFile);
-                    });
-                }
+                // --- BROWN SELECTION: Use VideoGeneratorNew ---
+                VideoGeneratorNew.createAnimatedVideo(context, status, new VideoGeneratorNew.VideoGenerationCallback() {
+                    @Override
+                    public void onProgress(int percentage) {
+                        ((Activity) context).runOnUiThread(() -> {
+                            progressDialog.setProgress(percentage);
+                            progressDialog.setMessage("Rendering frame " + percentage + "%");
+                        });
+                    }
 
-                @Override
-                public void onError(Exception e) {
-                    ((Activity) context).runOnUiThread(() -> {
-                        progressDialog.dismiss();
-                        // Full error shown + logged for debugging
-                        android.util.Log.e("VideoGen", "Failed", e);
-                        Toast.makeText(context,
-                                "Error: " + e.getClass().getSimpleName()
-                                        + "\n" + e.getMessage(),
-                                Toast.LENGTH_LONG).show();
-                    });
-                }
-            });
+                    @Override
+                    public void onFinished(File videoFile) {
+                        ((Activity) context).runOnUiThread(() -> {
+                            progressDialog.dismiss();
+                            shareVideo(context, videoFile);
+                        });
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+                        ((Activity) context).runOnUiThread(() -> {
+                            progressDialog.dismiss();
+                            android.util.Log.e("VideoGen", "Failed", e);
+                            Toast.makeText(context, "Error: " + e.getClass().getSimpleName() + "\n" + e.getMessage(), Toast.LENGTH_LONG).show();
+                        });
+                    }
+                });
+
+            } else {
+
+                // --- BLUE SELECTION (Or Default): Use VideoGenerator ---
+                VideoGenerator.createAnimatedVideo(context, status, new VideoGenerator.VideoGenerationCallback() {
+                    @Override
+                    public void onProgress(int percentage) {
+                        ((Activity) context).runOnUiThread(() -> {
+                            progressDialog.setProgress(percentage);
+                            progressDialog.setMessage("Rendering frame " + percentage + "%");
+                        });
+                    }
+
+                    @Override
+                    public void onFinished(File videoFile) {
+                        ((Activity) context).runOnUiThread(() -> {
+                            progressDialog.dismiss();
+                            shareVideo(context, videoFile);
+                        });
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+                        ((Activity) context).runOnUiThread(() -> {
+                            progressDialog.dismiss();
+                            android.util.Log.e("VideoGen", "Failed", e);
+                            Toast.makeText(context, "Error: " + e.getClass().getSimpleName() + "\n" + e.getMessage(), Toast.LENGTH_LONG).show();
+                        });
+                    }
+                });
+
+            }
         });
         holder.btnDelete.setOnClickListener(v -> {
             dbHelper.deleteStatus(status.getId());

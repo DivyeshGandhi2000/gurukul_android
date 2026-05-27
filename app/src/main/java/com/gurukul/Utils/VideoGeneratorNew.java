@@ -29,7 +29,7 @@ import java.nio.ByteBuffer;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class VideoGenerator {
+public class VideoGeneratorNew {
 
     public interface VideoGenerationCallback {
         void onProgress(int percentage);
@@ -118,7 +118,7 @@ public class VideoGenerator {
                 viewHandler.post(() -> {
                     try {
                         View v = LayoutInflater.from(context)
-                                .inflate(R.layout.item_video_new_xml, null);
+                                .inflate(R.layout.item_video2_new_xml, null);
 
                         ImageView    mainImage  = v.findViewById(R.id.image);
                         TextView     tvType     = v.findViewById(R.id.type);
@@ -331,7 +331,7 @@ public class VideoGenerator {
                 viewHandler.post(() -> {
                     try {
                         View v = LayoutInflater.from(context)
-                                .inflate(R.layout.item_video_new_xml, null);
+                                .inflate(R.layout.item_video2_new_xml, null);
 
                         ImageView    mainImage  = v.findViewById(R.id.image);
                         TextView     tvType     = v.findViewById(R.id.type);
@@ -406,27 +406,16 @@ public class VideoGenerator {
                 long presentationTimeUs = 0L;
 
                 // ── Step 7: Render loop ──
-                // Calculate how many frames make up 0.5 seconds
-                final int posterFrameCount = frameRate / 2;
-
                 for (int i = 0; i < totalFrames; i++) {
+                    final float tFinal = (float) i / totalFrames;
                     final int   frame  = i;
                     final int   nW     = nativeWidth;
                     final int   nH     = nativeHeight;
 
-                    // Create a new timeline that only starts AFTER the poster frames are done
-                    final float animProgress;
-                    if (frame <= posterFrameCount) {
-                        animProgress = 0f;
-                    } else {
-                        animProgress = (float) (frame - posterFrameCount) / (totalFrames - posterFrameCount);
-                    }
-
                     CountDownLatch animLatch = new CountDownLatch(1);
                     viewHandler.post(() -> {
                         try {
-                            if (frame < posterFrameCount) {
-                                // FRAMES 0 to 14: Hold everything FULLY VISIBLE so WhatsApp definitely catches it
+                            if (frame == 0) {
                                 footerCard.setAlpha(1f);
                                 headerCard.setAlpha(1f);
                                 dateBar.setAlpha(1f);
@@ -434,53 +423,28 @@ public class VideoGenerator {
                                 tvType.setAlpha(1f);
                                 tvName.setAlpha(1f);
                                 tvDesc.setAlpha(1f);
-
-                                // Force elements to their final resting positions (0 translation/1 scale)
-                                dateBar.setTranslationX(0f);
-                                headerCard.setTranslationY(0f);
-                                mainImage.setScaleX(1f);
-                                mainImage.setScaleY(1f);
-                                tvType.setTranslationY(0f);
-                                tvName.setTranslationY(0f);
-                                tvDesc.setTranslationY(0f);
-                                footerCard.setTranslationY(0f);
-
-                                if (tvWebsite != null) {
-                                    tvWebsite.setAlpha(1f);
-                                    tvWebsite.setScaleX(1f);
-                                    tvWebsite.setScaleY(1f);
-                                }
-                            } else if (frame == posterFrameCount) {
-                                // FRAME 15: Instantly hide everything to prepare for the fade-in animation
-                                footerCard.setAlpha(0f);
-                                headerCard.setAlpha(0f);
-                                dateBar.setAlpha(0f);
-                                mainImage.setAlpha(0f);
-                                tvType.setAlpha(0f);
-                                tvName.setAlpha(0f);
-                                tvDesc.setAlpha(0f);
                                 if (tvWebsite != null) {
                                     tvWebsite.setAlpha(0f);
                                     tvWebsite.setScaleX(0.5f);
                                     tvWebsite.setScaleY(0.5f);
                                 }
                             } else {
-                                // FRAMES 16+: Run your existing animation logic using 'animProgress'
-                                float dateIn    = easeOutCubic(window(animProgress, 0.00f, 0.06f));
-                                float headerIn  = easeOutBack (window(animProgress, 0.03f, 0.10f));
-                                float imgIn     = easeOutCubic(window(animProgress, 0.06f, 0.13f));
-                                float typeIn    = easeOutCubic(window(animProgress, 0.10f, 0.16f));
-                                float nameIn    = easeOutCubic(window(animProgress, 0.12f, 0.18f));
-                                float descIn    = easeOutCubic(window(animProgress, 0.14f, 0.20f));
-                                float fadeOut   = easeOutCubic(window(animProgress, 0.60f, 0.68f));
-                                float footerIn  = easeOutBack (window(animProgress, 0.70f, 0.82f));
-                                float websiteIn = easeOutBack (window(animProgress, 0.84f, 0.94f));
+                                float dateIn    = easeOutCubic(window(tFinal, 0.00f, 0.06f));
+                                float headerIn  = easeOutBack (window(tFinal, 0.03f, 0.10f));
+                                float imgIn     = easeOutCubic(window(tFinal, 0.06f, 0.13f));
+                                float typeIn    = easeOutCubic(window(tFinal, 0.10f, 0.16f));
+                                float nameIn    = easeOutCubic(window(tFinal, 0.12f, 0.18f));
+                                float descIn    = easeOutCubic(window(tFinal, 0.14f, 0.20f));
+                                float fadeOut   = easeOutCubic(window(tFinal, 0.60f, 0.68f));
+                                float footerIn  = easeOutBack (window(tFinal, 0.70f, 0.82f));
+                                float websiteIn = easeOutBack (window(tFinal, 0.84f, 0.94f));
 
                                 dateBar.setTranslationX(nW * (1f - dateIn) - (nW * fadeOut));
                                 dateBar.setAlpha(Math.max(0f, dateIn - fadeOut));
 
                                 headerCard.setTranslationY(-200f * (1f - headerIn));
-                                headerCard.setAlpha(Math.min(1f, window(animProgress, 0.03f, 0.10f) * 2f));
+                                headerCard.setAlpha(Math.min(1f,
+                                        window(tFinal, 0.03f, 0.10f) * 2f));
 
                                 float imgScale = 0.70f + 0.30f * imgIn - 0.30f * fadeOut;
                                 mainImage.setScaleX(imgScale);
@@ -497,13 +461,15 @@ public class VideoGenerator {
                                 tvDesc.setTranslationY(30f * (1f - descIn) - 30f * fadeOut);
 
                                 float footerCenterTargetTransY =
-                                        (nH / 2f) - (footerCard.getTop() + footerCard.getHeight() / 2f);
+                                        (nH / 2f) - (footerCard.getTop()
+                                                + footerCard.getHeight() / 2f);
                                 footerCard.setTranslationY(
                                         nH + (footerCenterTargetTransY - nH) * footerIn);
                                 footerCard.setAlpha(footerIn);
 
                                 if (tvWebsite != null) {
-                                    tvWebsite.setAlpha(Math.min(1f, Math.max(0.4f, websiteIn)));
+                                    tvWebsite.setAlpha(Math.min(1f,
+                                            Math.max(0.4f, websiteIn)));
                                     float scale = 0.5f + 0.5f * Math.min(1f, websiteIn);
                                     tvWebsite.setScaleX(scale);
                                     tvWebsite.setScaleY(scale);
@@ -549,10 +515,8 @@ public class VideoGenerator {
                     }
 
                     presentationTimeUs += frameDurationUs;
-
-                    // Update progress using the overall timeline so the progress bar is smooth
                     if (callback != null)
-                        callback.onProgress((int) (((float) i / totalFrames) * 100));
+                        callback.onProgress((int) (tFinal * 100));
                 }
 
                 // ── Step 8: Flush remaining frames ──
