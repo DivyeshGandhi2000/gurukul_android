@@ -114,15 +114,10 @@ public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.ViewHolder
             progressDialog.setCancelable(false);
             progressDialog.show();
 
-            // 1. Get the selected video color from SharedPreferences
             SharedPreferences prefs = context.getSharedPreferences("AppPrefs", Context.MODE_PRIVATE);
-            // Default to "blue" if the user hasn't selected anything yet
             String videoColor = prefs.getString("video_color", "blue");
 
-            // 2. Check which color was selected and run the appropriate generator
             if ("brown".equals(videoColor)) {
-
-                // --- BROWN SELECTION: Use VideoGeneratorNew ---
                 VideoGeneratorNew.createAnimatedVideo(context, status, new VideoGeneratorNew.VideoGenerationCallback() {
                     @Override
                     public void onProgress(int percentage) {
@@ -136,7 +131,13 @@ public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.ViewHolder
                     public void onFinished(File videoFile) {
                         ((Activity) context).runOnUiThread(() -> {
                             progressDialog.dismiss();
-                            shareVideo(context, videoFile);
+                            // FIX: Save to MediaStore first to generate thumbnail
+                            Uri savedUri = saveVideoToDownloadsAndGetUri(context, videoFile);
+                            if (savedUri!= null) {
+                                shareVideoUri(context, savedUri);
+                            } else {
+                                shareVideo(context, videoFile); // fallback
+                            }
                         });
                     }
 
@@ -151,8 +152,6 @@ public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.ViewHolder
                 });
 
             } else {
-
-                // --- BLUE SELECTION (Or Default): Use VideoGenerator ---
                 VideoGenerator.createAnimatedVideo(context, status, new VideoGenerator.VideoGenerationCallback() {
                     @Override
                     public void onProgress(int percentage) {
@@ -166,7 +165,13 @@ public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.ViewHolder
                     public void onFinished(File videoFile) {
                         ((Activity) context).runOnUiThread(() -> {
                             progressDialog.dismiss();
-                            shareVideo(context, videoFile);
+                            // FIX: Save to MediaStore first to generate thumbnail
+                            Uri savedUri = saveVideoToDownloadsAndGetUri(context, videoFile);
+                            if (savedUri!= null) {
+                                shareVideoUri(context, savedUri);
+                            } else {
+                                shareVideo(context, videoFile); // fallback
+                            }
                         });
                     }
 
@@ -179,7 +184,6 @@ public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.ViewHolder
                         });
                     }
                 });
-
             }
         });
         holder.btnDelete.setOnClickListener(v -> {
@@ -190,6 +194,72 @@ public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.ViewHolder
             Toast.makeText(context, "Status deleted", Toast.LENGTH_SHORT).show();
         });
     }
+
+    private Uri saveVideoToDownloadsAndGetUri(Context context, File videoFile) {
+        try {
+            if (videoFile == null ||!videoFile.exists()) {
+                Toast.makeText(context, "Video file not found", Toast.LENGTH_LONG).show();
+                return null;
+            }
+
+            ContentValues values = new ContentValues();
+            values.put(MediaStore.Video.Media.DISPLAY_NAME, "Shantidhara_" + System.currentTimeMillis() + ".mp4");
+            values.put(MediaStore.Video.Media.MIME_TYPE, "video/mp4");
+            values.put(MediaStore.Video.Media.RELATIVE_PATH, Environment.DIRECTORY_MOVIES + "/Shantidhara");
+            values.put(MediaStore.Video.Media.IS_PENDING, 1);
+
+            Uri collection = MediaStore.Video.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY);
+            Uri uri = context.getContentResolver().insert(collection, values);
+            if (uri == null) return null;
+
+            try (OutputStream out = context.getContentResolver().openOutputStream(uri);
+                 FileInputStream in = new FileInputStream(videoFile)) {
+                byte[] buffer = new byte[4096];
+                int read;
+                while ((read = in.read(buffer))!= -1) {
+                    out.write(buffer, 0, read);
+                }
+            }
+
+            values.clear();
+            values.put(MediaStore.Video.Media.IS_PENDING, 0);
+            context.getContentResolver().update(uri, values, null, null);
+            return uri;
+
+        } catch (Exception e) {
+            Log.e("VIDEO_SAVE_ERROR", "saveVideoToDownloads: " + e.getMessage(), e);
+            return null;
+        }
+    }
+
+    // FIX: New method to share MediaStore Uri
+    private void shareVideoUri(Context context, Uri videoUri) {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("video/mp4");
+        shareIntent.putExtra(Intent.EXTRA_STREAM, videoUri);
+        shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        context.startActivity(Intent.createChooser(shareIntent, "Share Status Video via..."));
+    }
+
+    private void shareVideo(Context context, File videoFile) {
+        if (videoFile == null ||!videoFile.exists()) {
+            Toast.makeText(context, "Video file not found!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Uri videoUri = FileProvider.getUriForFile(
+                context,
+                context.getPackageName() + ".fileprovider",
+                videoFile
+        );
+
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("video/mp4");
+        shareIntent.putExtra(Intent.EXTRA_STREAM, videoUri);
+        shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        context.startActivity(Intent.createChooser(shareIntent, "Share Status Video via..."));
+    }
+
 
     private void saveVideoToDownloads(Context context, File videoFile) {
 
@@ -285,30 +355,30 @@ public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.ViewHolder
                     Toast.LENGTH_LONG).show();
         }
     }
-    private void shareVideo(Context context, File videoFile) {
-        if (videoFile == null || !videoFile.exists()) {
-            Toast.makeText(context, "Video file not found!", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        // 1. Get the secure URI using FileProvider
-        Uri videoUri = FileProvider.getUriForFile(
-                context,
-                context.getPackageName() + ".fileprovider", // This must match your Manifest
-                videoFile
-        );
-
-        // 2. Create the Share Intent
-        Intent shareIntent = new Intent(Intent.ACTION_SEND);
-        shareIntent.setType("video/mp4");
-        shareIntent.putExtra(Intent.EXTRA_STREAM, videoUri);
-
-        // 3. Grant temporary read permission to whichever app receives it (WhatsApp, etc.)
-        shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-
-        // 4. Open the Share Sheet
-        context.startActivity(Intent.createChooser(shareIntent, "Share Status Video via..."));
-    }
+//    private void shareVideo(Context context, File videoFile) {
+//        if (videoFile == null || !videoFile.exists()) {
+//            Toast.makeText(context, "Video file not found!", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+//
+//        // 1. Get the secure URI using FileProvider
+//        Uri videoUri = FileProvider.getUriForFile(
+//                context,
+//                context.getPackageName() + ".fileprovider", // This must match your Manifest
+//                videoFile
+//        );
+//
+//        // 2. Create the Share Intent
+//        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+//        shareIntent.setType("video/mp4");
+//        shareIntent.putExtra(Intent.EXTRA_STREAM, videoUri);
+//
+//        // 3. Grant temporary read permission to whichever app receives it (WhatsApp, etc.)
+//        shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+//
+//        // 4. Open the Share Sheet
+//        context.startActivity(Intent.createChooser(shareIntent, "Share Status Video via..."));
+//    }
 
     @Override
     public int getItemCount() {

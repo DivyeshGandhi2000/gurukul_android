@@ -55,7 +55,6 @@ public class VideoGeneratorNew {
         return Math.max(0f, Math.min(1f, (t - start) / (end - start)));
     }
 
-
     private static boolean isEmulator() {
         return android.os.Build.FINGERPRINT.startsWith("generic")
                 || android.os.Build.FINGERPRINT.startsWith("unknown")
@@ -67,9 +66,7 @@ public class VideoGeneratorNew {
                 || android.os.Build.DEVICE.startsWith("generic");
     }
 
-    // ── Find best encoder (hardware first, software fallback) ──
     private static MediaCodec createBestEncoder(MediaFormat format) throws Exception {
-        // Try hardware encoder first
         try {
             MediaCodecList codecList = new MediaCodecList(MediaCodecList.REGULAR_CODECS);
             String encoderName = codecList.findEncoderForFormat(format);
@@ -81,19 +78,14 @@ public class VideoGeneratorNew {
         } catch (Exception e) {
             android.util.Log.w("VideoGenerator", "Hardware encoder failed, trying software...");
         }
-
-        // Software fallback — works on emulator
         try {
             return MediaCodec.createByCodecName("OMX.google.h264.encoder");
         } catch (Exception e) {
             android.util.Log.w("VideoGenerator", "OMX.google fallback failed");
         }
-
-        // Last resort
         return MediaCodec.createEncoderByType(MediaFormat.MIMETYPE_VIDEO_AVC);
     }
 
-    // ── Thumbnail Generator ──
     public static void createThumbnail(Context context, Status status,
                                        ThumbnailGenerationCallback callback) {
         new Thread(() -> {
@@ -197,7 +189,6 @@ public class VideoGeneratorNew {
         }).start();
     }
 
-    // ── Main Video Generator ──
     public static void createAnimatedVideo(Context context, Status status,
                                            VideoGenerationCallback callback) {
         new Thread(() -> {
@@ -212,24 +203,20 @@ public class VideoGeneratorNew {
 
             try {
                 boolean onEmulator = isEmulator();
-                android.util.Log.d("VideoGenerator",
-                        "Running on emulator: " + onEmulator);
+                android.util.Log.d("VideoGenerator", "Running on emulator: " + onEmulator);
 
-                // ── Output file ──
                 File cacheDir = context.getExternalCacheDir();
                 if (cacheDir == null) cacheDir = context.getCacheDir();
                 File outputFile = new File(cacheDir,
                         "Shantidhara_status_" + System.currentTimeMillis() + ".mp4");
 
-                // ── Use lower resolution on emulator to avoid codec limits ──
-                final int  encWidth       = onEmulator ? 720  : 1080;
-                final int  encHeight      = onEmulator ? 1280 : 1920;
-                final int  frameRate      = onEmulator ? 15   : 30;
-                final int  totalFrames    = onEmulator ? 180  : 360; // 12 sec either way
-                final int  bitRate        = onEmulator ? 2_000_000 : 8_000_000;
+                final int  encWidth        = onEmulator ? 720  : 1080;
+                final int  encHeight       = onEmulator ? 1280 : 1920;
+                final int  frameRate       = onEmulator ? 15   : 30;
+                final int  totalFrames     = onEmulator ? 180  : 360;
+                final int  bitRate         = onEmulator ? 2_000_000 : 8_000_000;
                 final long frameDurationUs = 1_000_000L / frameRate;
 
-                // ── Step 1: Configure encoder ──
                 MediaFormat videoFormat = MediaFormat.createVideoFormat(
                         MediaFormat.MIMETYPE_VIDEO_AVC, encWidth, encHeight);
                 videoFormat.setInteger(MediaFormat.KEY_COLOR_FORMAT,
@@ -238,7 +225,6 @@ public class VideoGeneratorNew {
                 videoFormat.setInteger(MediaFormat.KEY_FRAME_RATE,       frameRate);
                 videoFormat.setInteger(MediaFormat.KEY_I_FRAME_INTERVAL, 1);
 
-                // ── Step 2: Create best available encoder ──
                 encoder = createBestEncoder(videoFormat);
                 encoder.configure(videoFormat, null, null, MediaCodec.CONFIGURE_FLAG_ENCODE);
                 inputSurface = encoder.createInputSurface();
@@ -246,40 +232,101 @@ public class VideoGeneratorNew {
 
                 android.util.Log.d("VideoGenerator", "Encoder started successfully");
 
-                // ── Step 3: Extract audio ──
-//                audioExtractor = new MediaExtractor();
-//                android.content.res.AssetFileDescriptor afd =
-//                        context.getResources().openRawResourceFd(R.raw.bg_music);
-//                audioExtractor.setDataSource(
-//                        afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
-//                afd.close();
-//
-//                int         audioSourceTrack = -1;
-//                MediaFormat audioFormat      = null;
-//                for (int i = 0; i < audioExtractor.getTrackCount(); i++) {
-//                    MediaFormat tf   = audioExtractor.getTrackFormat(i);
-//                    String      mime = tf.getString(MediaFormat.KEY_MIME);
-//                    if (mime != null && mime.startsWith("audio/")) {
-//                        audioSourceTrack = i;
-//                        audioFormat      = tf;
-//                        break;
-//                    }
-//                }
-//                if (audioSourceTrack < 0)
-//                    throw new Exception("No audio track found in bg_music file");
-//                audioExtractor.selectTrack(audioSourceTrack);
+                DisplayMetrics metrics     = context.getResources().getDisplayMetrics();
+                int            nativeWidth = metrics.widthPixels;
+                int            nativeHeight= (nativeWidth * 16) / 9;
 
-//                android.util.Log.d("VideoGenerator", "Audio extracted: "
-//                        + audioFormat.getString(MediaFormat.KEY_MIME));
-
-                // ── Step 4: Warmup encoder — force OUTPUT_FORMAT_CHANGED ──
+                // ---------------------------------------------------------------
+                // WARMUP: draw REAL thumbnail frame so the first encoded frame
+                // (which leaks into the stream on Android 15) is already your
+                // thumbnail — not a blank white frame.
+                // ---------------------------------------------------------------
                 {
+                    // Build the thumbnail view on the handler thread
+                    CountDownLatch warmupLatch = new CountDownLatch(1);
+                    AtomicReference<View> warmupViewRef = new AtomicReference<>();
+
+                    viewHandler.post(() -> {
+                        try {
+                            View v = LayoutInflater.from(context)
+                                    .inflate(R.layout.item_video2_new_xml, null);
+
+                            ImageView    mainImage  = v.findViewById(R.id.image);
+                            TextView     tvType     = v.findViewById(R.id.type);
+                            TextView     tvName     = v.findViewById(R.id.name);
+                            TextView     tvDesc     = v.findViewById(R.id.discription);
+                            TextView     tvDate     = v.findViewById(R.id.date);
+                            LinearLayout footerCard = v.findViewById(R.id.footerCard);
+                            LinearLayout headerCard = v.findViewById(R.id.headerCard);
+                            TextView     tvWebsite  = v.findViewById(R.id.tvWebsiteUrl);
+
+                            // Full-visible state (same as frame 0 in the loop)
+                            String typeText = status.getType();
+                            if (typeText != null && typeText.equals("अन्य")) {
+                                tvType.setVisibility(View.GONE);
+                            } else {
+                                tvType.setVisibility(View.VISIBLE);
+                                tvType.setText(typeText);
+                            }
+                            tvName.setText(status.getName());
+                            tvDesc.setText(status.getDescription());
+                            tvDate.setText(DateConverterHindi.convertToHindi(status.getDate()));
+
+                            // All elements fully visible / reset
+                            if (footerCard != null) { footerCard.setAlpha(1f); footerCard.setTranslationY(0f); }
+                            if (headerCard != null) { headerCard.setAlpha(1f); headerCard.setTranslationY(0f); }
+                            mainImage.setAlpha(1f);
+                            mainImage.setScaleX(1f);
+                            mainImage.setScaleY(1f);
+                            tvType.setAlpha(1f); tvType.setTranslationY(0f);
+                            tvName.setAlpha(1f); tvName.setTranslationY(0f);
+                            tvDesc.setAlpha(1f); tvDesc.setTranslationY(0f);
+                            if (tvWebsite != null) {
+                                tvWebsite.setAlpha(1f);
+                                tvWebsite.setScaleX(1f);
+                                tvWebsite.setScaleY(1f);
+                            }
+
+                            String imgPath = status.getImagePath();
+                            if (imgPath != null && !imgPath.isEmpty()) {
+                                File imgFile = new File(imgPath);
+                                if (imgFile.exists()) {
+                                    BitmapFactory.Options opts = new BitmapFactory.Options();
+                                    opts.inSampleSize = 1;
+                                    opts.inPreferredConfig = Bitmap.Config.ARGB_8888;
+                                    Bitmap bmp = BitmapFactory.decodeFile(imgFile.getAbsolutePath(), opts);
+                                    if (bmp != null) mainImage.setImageBitmap(bmp);
+                                } else {
+                                    mainImage.setVisibility(View.GONE);
+                                }
+                            } else {
+                                mainImage.setVisibility(View.GONE);
+                            }
+
+                            v.measure(
+                                    View.MeasureSpec.makeMeasureSpec(nativeWidth,  View.MeasureSpec.EXACTLY),
+                                    View.MeasureSpec.makeMeasureSpec(nativeHeight, View.MeasureSpec.EXACTLY));
+                            v.layout(0, 0, nativeWidth, nativeHeight);
+                            warmupViewRef.set(v);
+                        } finally {
+                            warmupLatch.countDown();
+                        }
+                    });
+
+                    warmupLatch.await();
+
+                    // Draw thumbnail content onto the warmup surface canvas
                     Canvas warmupCanvas = inputSurface.lockCanvas(null);
                     if (warmupCanvas != null) {
                         warmupCanvas.drawColor(0xFFFFFFFF);
+                        warmupCanvas.scale(
+                                (float) encWidth  / nativeWidth,
+                                (float) encHeight / nativeHeight);
+                        warmupViewRef.get().draw(warmupCanvas);
                         inputSurface.unlockCanvasAndPost(warmupCanvas);
                     }
 
+                    // Drain encoder until output format is signalled
                     MediaCodec.BufferInfo warmupInfo = new MediaCodec.BufferInfo();
                     boolean formatReceived = false;
                     int attempts = 0;
@@ -295,27 +342,18 @@ public class VideoGeneratorNew {
                         attempts++;
                     }
                     if (!formatReceived)
-                        throw new Exception("Encoder warmup failed after 500 attempts. "
-                                + "Device encoder not supported.");
+                        throw new Exception("Encoder warmup failed after 500 attempts. Device encoder not supported.");
                 }
+                // ---------------------------------------------------------------
+                // END WARMUP
+                // ---------------------------------------------------------------
 
-                // ── Step 5: Create muxer — add BOTH tracks — start ──
                 muxer = new MediaMuxer(
                         outputFile.getAbsolutePath(),
                         MediaMuxer.OutputFormat.MUXER_OUTPUT_MPEG_4);
 
                 int muxVideoTrack = muxer.addTrack(encoder.getOutputFormat());
-//                int muxAudioTrack = muxer.addTrack(audioFormat);
                 muxer.start();
-
-//                android.util.Log.d("VideoGenerator",
-//                        "Muxer started. videoTrack=" + muxVideoTrack
-//                                + " audioTrack=" + muxAudioTrack);
-
-                // ── Step 6: Inflate layout ──
-                DisplayMetrics metrics     = context.getResources().getDisplayMetrics();
-                int            nativeWidth = metrics.widthPixels;
-                int            nativeHeight= (nativeWidth * 16) / 9;
 
                 CountDownLatch viewLatch = new CountDownLatch(1);
                 AtomicReference<View>         viewRef       = new AtomicReference<>();
@@ -405,7 +443,6 @@ public class VideoGeneratorNew {
                 MediaCodec.BufferInfo bufferInfo = new MediaCodec.BufferInfo();
                 long presentationTimeUs = 0L;
 
-                // ── Step 7: Render loop ──
                 for (int i = 0; i < totalFrames; i++) {
                     final float tFinal = (float) i / totalFrames;
                     final int   frame  = i;
@@ -416,6 +453,7 @@ public class VideoGeneratorNew {
                     viewHandler.post(() -> {
                         try {
                             if (frame == 0) {
+                                // Frame 0 = Thumbnail. Keep everything fully visible.
                                 footerCard.setAlpha(1f);
                                 headerCard.setAlpha(1f);
                                 dateBar.setAlpha(1f);
@@ -423,28 +461,37 @@ public class VideoGeneratorNew {
                                 tvType.setAlpha(1f);
                                 tvName.setAlpha(1f);
                                 tvDesc.setAlpha(1f);
+                                dateBar.setTranslationX(0f);
+                                headerCard.setTranslationY(0f);
+                                mainImage.setScaleX(1f);
+                                mainImage.setScaleY(1f);
+                                tvType.setTranslationY(0f);
+                                tvName.setTranslationY(0f);
+                                tvDesc.setTranslationY(0f);
                                 if (tvWebsite != null) {
-                                    tvWebsite.setAlpha(0f);
-                                    tvWebsite.setScaleX(0.5f);
-                                    tvWebsite.setScaleY(0.5f);
+                                    tvWebsite.setAlpha(1f);
+                                    tvWebsite.setScaleX(1f);
+                                    tvWebsite.setScaleY(1f);
                                 }
                             } else {
-                                float dateIn    = easeOutCubic(window(tFinal, 0.00f, 0.06f));
-                                float headerIn  = easeOutBack (window(tFinal, 0.03f, 0.10f));
-                                float imgIn     = easeOutCubic(window(tFinal, 0.06f, 0.13f));
-                                float typeIn    = easeOutCubic(window(tFinal, 0.10f, 0.16f));
-                                float nameIn    = easeOutCubic(window(tFinal, 0.12f, 0.18f));
-                                float descIn    = easeOutCubic(window(tFinal, 0.14f, 0.20f));
-                                float fadeOut   = easeOutCubic(window(tFinal, 0.60f, 0.68f));
-                                float footerIn  = easeOutBack (window(tFinal, 0.70f, 0.82f));
-                                float websiteIn = easeOutBack (window(tFinal, 0.84f, 0.94f));
+                                // Animation starts from frame 1
+                                float tAnim = (float) (frame - 1) / (totalFrames - 1);
+                                float dateIn    = easeOutCubic(window(tAnim, 0.00f, 0.06f));
+                                float headerIn  = easeOutBack (window(tAnim, 0.03f, 0.10f));
+                                float imgIn     = easeOutCubic(window(tAnim, 0.06f, 0.13f));
+                                float typeIn    = easeOutCubic(window(tAnim, 0.10f, 0.16f));
+                                float nameIn    = easeOutCubic(window(tAnim, 0.12f, 0.18f));
+                                float descIn    = easeOutCubic(window(tAnim, 0.14f, 0.20f));
+                                float fadeOut   = easeOutCubic(window(tAnim, 0.60f, 0.68f));
+                                float footerIn  = easeOutBack (window(tAnim, 0.70f, 0.82f));
+                                float websiteIn = easeOutBack (window(tAnim, 0.84f, 0.94f));
 
                                 dateBar.setTranslationX(nW * (1f - dateIn) - (nW * fadeOut));
                                 dateBar.setAlpha(Math.max(0f, dateIn - fadeOut));
 
                                 headerCard.setTranslationY(-200f * (1f - headerIn));
                                 headerCard.setAlpha(Math.min(1f,
-                                        window(tFinal, 0.03f, 0.10f) * 2f));
+                                        window(tAnim, 0.03f, 0.10f) * 2f));
 
                                 float imgScale = 0.70f + 0.30f * imgIn - 0.30f * fadeOut;
                                 mainImage.setScaleX(imgScale);
@@ -483,7 +530,6 @@ public class VideoGeneratorNew {
 
                     animLatch.await();
 
-                    // Draw frame to encoder surface
                     Canvas canvas = inputSurface.lockCanvas(null);
                     if (canvas != null) {
                         canvas.drawColor(0xFFFFFFFF);
@@ -494,12 +540,9 @@ public class VideoGeneratorNew {
                         inputSurface.unlockCanvasAndPost(canvas);
                     }
 
-                    // Drain encoded output into muxer
                     int idx = encoder.dequeueOutputBuffer(bufferInfo, 10_000);
                     while (idx != MediaCodec.INFO_TRY_AGAIN_LATER) {
-                        if (idx == MediaCodec.INFO_OUTPUT_FORMAT_CHANGED) {
-                            // Already handled in warmup — ignore here
-                        } else if (idx >= 0) {
+                        if (idx >= 0) {
                             boolean isConfig =
                                     (bufferInfo.flags & MediaCodec.BUFFER_FLAG_CODEC_CONFIG) != 0;
                             if (!isConfig && bufferInfo.size > 0) {
@@ -519,7 +562,6 @@ public class VideoGeneratorNew {
                         callback.onProgress((int) (tFinal * 100));
                 }
 
-                // ── Step 8: Flush remaining frames ──
                 encoder.signalEndOfInputStream();
                 int remainingIdx = encoder.dequeueOutputBuffer(bufferInfo, 10_000);
                 while (remainingIdx != MediaCodec.INFO_TRY_AGAIN_LATER) {
@@ -541,28 +583,6 @@ public class VideoGeneratorNew {
                     remainingIdx = encoder.dequeueOutputBuffer(bufferInfo, 10_000);
                 }
 
-                // ── Step 9: Write audio trimmed to video length ──
-//                long videoDurationUs = presentationTimeUs;
-//                ByteBuffer audioBuf  = ByteBuffer.allocate(256 * 1024);
-//                MediaCodec.BufferInfo audioInfo = new MediaCodec.BufferInfo();
-//
-//                while (true) {
-//                    int sampleSize = audioExtractor.readSampleData(audioBuf, 0);
-//                    if (sampleSize < 0) break;
-//
-//                    long audioTimeUs = audioExtractor.getSampleTime();
-//                    if (audioTimeUs > videoDurationUs) break;
-//
-//                    audioInfo.offset             = 0;
-//                    audioInfo.size               = sampleSize;
-//                    audioInfo.presentationTimeUs = audioTimeUs;
-//                    audioInfo.flags              = audioExtractor.getSampleFlags();
-//
-//                    muxer.writeSampleData(audioBuf, audioInfo);
-//
-//                    audioExtractor.advance();
-//                }
-
                 android.util.Log.d("VideoGenerator", "Video created: " + outputFile.getPath());
 
                 if (callback != null) callback.onProgress(100);
@@ -572,12 +592,9 @@ public class VideoGeneratorNew {
                 android.util.Log.e("VideoGenerator", "FAILED: " + e.getMessage(), e);
                 if (callback != null) callback.onError(e);
             } finally {
-                try { if (encoder        != null) { encoder.stop();  encoder.release();  } }
-                catch (Exception ignored) {}
-                try { if (muxer          != null) { muxer.stop();    muxer.release();    } }
-                catch (Exception ignored) {}
-                try { if (audioExtractor != null) { audioExtractor.release();            } }
-                catch (Exception ignored) {}
+                try { if (encoder        != null) { encoder.stop();       encoder.release();       } } catch (Exception ignored) {}
+                try { if (muxer          != null) { muxer.stop();         muxer.release();         } } catch (Exception ignored) {}
+                try { if (audioExtractor != null) { audioExtractor.release();                      } } catch (Exception ignored) {}
                 handlerThread.quitSafely();
             }
         }).start();
