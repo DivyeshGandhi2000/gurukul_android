@@ -273,7 +273,7 @@ public class VideoGeneratorNew {
                             tvDate.setText(DateConverterHindi.convertToHindi(status.getDate()));
 
                             // All elements fully visible / reset
-                            if (footerCard != null) { footerCard.setAlpha(1f); footerCard.setTranslationY(0f); }
+                            if (footerCard != null) { footerCard.setAlpha(0f); } // Hides footer in the video's thumbnail frame
                             if (headerCard != null) { headerCard.setAlpha(1f); headerCard.setTranslationY(0f); }
                             mainImage.setAlpha(1f);
                             mainImage.setScaleX(1f);
@@ -454,7 +454,7 @@ public class VideoGeneratorNew {
                         try {
                             if (frame == 0) {
                                 // Frame 0 = Thumbnail. Keep everything fully visible.
-                                footerCard.setAlpha(1f);
+                                footerCard.setAlpha(0f);
                                 headerCard.setAlpha(1f);
                                 dateBar.setAlpha(1f);
                                 mainImage.setAlpha(1f);

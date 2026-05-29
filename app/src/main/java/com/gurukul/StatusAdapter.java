@@ -648,8 +648,8 @@ public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.ViewHolder
             Intent shareIntent = new Intent(Intent.ACTION_SEND);
             shareIntent.setType("image/png");
             shareIntent.putExtra(Intent.EXTRA_STREAM, imageUri);
-            shareIntent.putExtra(Intent.EXTRA_TEXT,
-                    status.getName() + "\n" + status.getDescription());
+//            shareIntent.putExtra(Intent.EXTRA_TEXT,
+//                    status.getName() + "\n" + status.getDescription());
             shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
             context.startActivity(Intent.createChooser(shareIntent, "Share Status"));

@@ -255,7 +255,8 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="श्री देवेंद्र जी छाप्या"
+                            android:text="श्री देवेंद्र जी\nछाप्या"
+                            android:textAlignment="center"
                             android:textColor="#8B0000"
                             android:textSize="8sp"
                             android:textStyle="bold" />
@@ -282,7 +283,8 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="श्री सुरेश कुमार कोठारी"
+                            android:text="श्री सुरेश चंद्र\nकोठारी"
+                            android:textAlignment="center"
                             android:textColor="#8B0000"
                             android:id="@+id/tvViceRole"
                             android:textSize="8sp"
@@ -309,7 +311,8 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="श्री सुंदर लाल भाणावत"
+                            android:text="श्री सुंदर लाल\nभाणावत"
+                            android:textAlignment="center"
                             android:textColor="#8B0000"
                             android:textSize="8sp"
                             android:textStyle="bold" />
