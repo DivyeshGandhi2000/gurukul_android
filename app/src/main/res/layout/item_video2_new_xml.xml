@@ -220,7 +220,7 @@
                 android:layout_gravity="center_vertical"
                 android:orientation="vertical"
                 android:padding="10dp">
-
+                
 
                 <TextView
                     android:layout_width="match_parent"
@@ -264,7 +264,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="श्री देवेंद्र छाप्या"
+                            android:text="श्री देवेंद्र जी छाप्या"
                             android:textColor="#8B0000"
                             android:textSize="10sp"
                             android:textStyle="bold" />
@@ -291,7 +291,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="श्री सुरेश कोठारी"
+                            android:text="श्री सुरेश कुमार कोठारी"
                             android:textColor="#8B0000"
                             android:id="@+id/tvViceRole"
                             android:textSize="10sp"
@@ -318,7 +318,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="श्री सुंदर भाणावत"
+                            android:text="श्री सुंदर लाल भाणावत"
                             android:textColor="#8B0000"
                             android:textSize="10sp"
                             android:textStyle="bold" />
