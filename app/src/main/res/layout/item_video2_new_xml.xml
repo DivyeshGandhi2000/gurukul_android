@@ -72,14 +72,18 @@
                         android:paddingHorizontal="8dp">
 
                         <TextView
-                            android:layout_width="wrap_content"
+                            android:id="@+id/tvTrustName"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:id="@+id/tvTrustName"
                             android:text="धर्मार्थ ट्रस्ट गुरुकुल ,ऋषभदेव"
                             android:textColor="#8B0000"
-                            android:textSize="16sp"
-                            android:textStyle="bold"/>
+                            android:textStyle="bold"
+                            android:maxLines="1"
+                            app:autoSizeTextType="uniform"
+                            app:autoSizeMinTextSize="10sp"
+                            app:autoSizeMaxTextSize="16sp"
+                            app:autoSizeStepGranularity="1sp" />
 
 
 
