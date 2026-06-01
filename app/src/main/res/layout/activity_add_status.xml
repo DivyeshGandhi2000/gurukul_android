@@ -145,15 +145,21 @@
                 android:textSize="16sp"
                 style="@style/CustomRadioButton" />
         </RadioGroup>
-        <Button
+
+        <TextView
             android:id="@+id/btnSave"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingVertical="16dp"
+            android:gravity="center"
+            android:background="@drawable/gradient_btn"
             android:text="Save Status"
-            android:textSize="18sp"
+            android:textColor="@color/white"
             android:layout_marginTop="20dp"
-            android:padding="16dp"
-            android:backgroundTint="@color/primary" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </LinearLayout>
 </ScrollView>

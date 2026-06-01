@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -40,7 +41,8 @@ public class AddStatusActivity extends AppCompatActivity {
     private ImageView ivPreview;
     private TextInputEditText etName, etDescription, etDate;
     private MaterialAutoCompleteTextView spinnerType;
-    private Button btnSelectImage, btnSave;
+    private Button btnSelectImage;
+    TextView btnSave;
     private DatabaseHelper dbHelper;
     private String imagePath = "";
 

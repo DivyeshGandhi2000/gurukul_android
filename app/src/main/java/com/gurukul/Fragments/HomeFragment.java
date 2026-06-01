@@ -20,6 +20,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.gurukul.AddStatusActivity;
 import com.gurukul.DatabaseHelper;
 import com.gurukul.R;
@@ -33,7 +34,7 @@ public class HomeFragment extends Fragment {
     private RecyclerView recyclerView;
     private StatusAdapter adapter;
     private DatabaseHelper dbHelper;
-    private Button btnAdd;
+    private FloatingActionButton btnAdd;
     private EditText searchInput;
     private List<Status> statusList = new ArrayList<>();
     @Nullable

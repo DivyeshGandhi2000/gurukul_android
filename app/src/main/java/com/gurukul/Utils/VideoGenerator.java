@@ -1,9 +1,11 @@
 package com.gurukul.Utils;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Typeface;
 import android.media.MediaCodec;
 import android.media.MediaCodecInfo;
 import android.media.MediaCodecList;
@@ -15,6 +17,7 @@ import android.os.HandlerThread;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -86,6 +89,46 @@ public class VideoGenerator {
         return MediaCodec.createEncoderByType(MediaFormat.MIMETYPE_VIDEO_AVC);
     }
 
+    // Helper method to recursively apply selected preference font to custom views
+    private static void applyFontToViewGroup(Context context, ViewGroup vg) {
+        if (vg == null) return;
+        for (int i = 0; i < vg.getChildCount(); i++) {
+            View child = vg.getChildAt(i);
+            if (child instanceof TextView) {
+                applyFont(context, (TextView) child);
+            } else if (child instanceof ViewGroup) {
+                applyFontToViewGroup(context, (ViewGroup) child);
+            }
+        }
+    }
+
+    private static void applyFont(Context context, TextView tv) {
+        if (tv == null) return;
+        SharedPreferences prefs = context.getSharedPreferences("AppPrefs", Context.MODE_PRIVATE);
+        String font = prefs.getString("font_family", "default");
+
+        Typeface typeface;
+        switch (font) {
+            case "serif":
+                typeface = Typeface.SERIF;
+                break;
+            case "monospace":
+                typeface = Typeface.MONOSPACE;
+                break;
+            case "sans-serif":
+                typeface = Typeface.SANS_SERIF;
+                break;
+            default:
+                typeface = Typeface.DEFAULT;
+                break;
+        }
+
+        int existingStyle = tv.getTypeface() != null
+                ? tv.getTypeface().getStyle()
+                : Typeface.NORMAL;
+        tv.setTypeface(typeface, existingStyle);
+    }
+
     public static void createThumbnail(Context context, Status status,
                                        ThumbnailGenerationCallback callback) {
         new Thread(() -> {
@@ -119,12 +162,10 @@ public class VideoGenerator {
                         TextView     tvDesc     = v.findViewById(R.id.discription);
                         TextView     tvDate     = v.findViewById(R.id.date);
                         LinearLayout footerCard = v.findViewById(R.id.footerCard);
-//                        View         vSpace     = v.findViewById(R.id.vSpace);
 
                         // Thumbnail represents Scene 1 components
                         if (footerCard != null) footerCard.setVisibility(View.GONE);
                         if (mainTemple != null) mainTemple.setVisibility(View.GONE);
-//                        if (vSpace != null) vSpace.setVisibility(View.VISIBLE);
 
                         String typeText = status.getType();
                         if (typeText != null && typeText.equals("अन्य")) {
@@ -136,6 +177,9 @@ public class VideoGenerator {
                         tvName.setText(status.getName());
                         tvDesc.setText(status.getDescription());
                         tvDate.setText(DateConverterHindi.convertToHindi(status.getDate()));
+
+                        // Dynamically apply selected app font family
+                        applyFontToViewGroup(context, (ViewGroup) v);
 
                         String imgPath = status.getImagePath();
                         if (imgPath != null && !imgPath.isEmpty()) {
@@ -260,10 +304,8 @@ public class VideoGenerator {
                             LinearLayout footerCard = v.findViewById(R.id.footerCard);
                             LinearLayout headerCard = v.findViewById(R.id.headerCard);
                             TextView     tvWebsite  = v.findViewById(R.id.tvWebsiteUrl);
-//                            View         vSpace     = v.findViewById(R.id.vSpace);
 
                             if (mainTemple != null) mainTemple.setVisibility(View.GONE);
-//                            if (vSpace != null) vSpace.setVisibility(View.VISIBLE);
 
                             String typeText = status.getType();
                             if (typeText != null && typeText.equals("अन्य")) {
@@ -275,6 +317,9 @@ public class VideoGenerator {
                             tvName.setText(status.getName());
                             tvDesc.setText(status.getDescription());
                             tvDate.setText(DateConverterHindi.convertToHindi(status.getDate()));
+
+                            // Dynamic Font Application during Warmup
+                            applyFontToViewGroup(context, (ViewGroup) v);
 
                             if (footerCard != null) { footerCard.setAlpha(0f); }
                             if (headerCard != null) { headerCard.setAlpha(1f); headerCard.setTranslationY(0f); }
@@ -362,7 +407,6 @@ public class VideoGenerator {
                 AtomicReference<LinearLayout> footerCardRef = new AtomicReference<>();
                 AtomicReference<LinearLayout> headerCardRef = new AtomicReference<>();
                 AtomicReference<TextView>     tvWebsiteRef  = new AtomicReference<>();
-//                AtomicReference<View>         vSpaceRef     = new AtomicReference<>();
 
                 viewHandler.post(() -> {
                     try {
@@ -379,7 +423,6 @@ public class VideoGenerator {
                         LinearLayout footerCard = v.findViewById(R.id.footerCard);
                         LinearLayout headerCard = v.findViewById(R.id.headerCard);
                         TextView     tvWebsite  = v.findViewById(R.id.tvWebsiteUrl);
-//                        View         vSpace     = v.findViewById(R.id.vSpace);
 
                         String typeText = status.getType();
                         if (typeText != null && typeText.equals("अन्य")) {
@@ -391,6 +434,9 @@ public class VideoGenerator {
                         tvName.setText(status.getName());
                         tvDesc.setText(status.getDescription());
                         tvDate.setText(DateConverterHindi.convertToHindi(status.getDate()));
+
+                        // Apply custom configuration fonts dynamically before layout measurement
+                        applyFontToViewGroup(context, (ViewGroup) v);
 
                         String imgPath = status.getImagePath();
                         if (imgPath != null && !imgPath.isEmpty()) {
@@ -424,7 +470,6 @@ public class VideoGenerator {
                         footerCardRef.set(footerCard);
                         headerCardRef.set(headerCard);
                         tvWebsiteRef.set(tvWebsite);
-//                        vSpaceRef.set(vSpace);
                     } finally {
                         viewLatch.countDown();
                     }
@@ -442,7 +487,6 @@ public class VideoGenerator {
                 LinearLayout footerCard = footerCardRef.get();
                 LinearLayout headerCard = headerCardRef.get();
                 TextView     tvWebsite  = tvWebsiteRef.get();
-//                View         vSpace     = vSpaceRef.get();
 
                 MediaCodec.BufferInfo bufferInfo = new MediaCodec.BufferInfo();
                 long presentationTimeUs = 0L;
@@ -457,9 +501,7 @@ public class VideoGenerator {
                     viewHandler.post(() -> {
                         try {
                             if (frame == 0) {
-                                // Frame 0 = Thumbnail Setup (Scene 1)
                                 if (mainTemple != null) mainTemple.setVisibility(View.GONE);
-//                                if (vSpace != null) vSpace.setVisibility(View.VISIBLE);
                                 mainImage.setVisibility(View.VISIBLE);
                                 tvType.setVisibility(View.VISIBLE);
                                 tvName.setVisibility(View.VISIBLE);
@@ -488,7 +530,6 @@ public class VideoGenerator {
                                 boolean isScene2 = (tAnim > 0.55f);
 
                                 if (isScene2) {
-                                    // --- SCENE 2: The Temple and Footer Cards ---
                                     if (mainImage.getVisibility() == View.VISIBLE) {
                                         mainImage.setVisibility(View.GONE);
                                         tvType.setVisibility(View.GONE);
@@ -496,13 +537,8 @@ public class VideoGenerator {
                                         tvDesc.setVisibility(View.GONE);
                                         dateBar.setVisibility(View.GONE);
 
-                                        // KEEP SPACE VISIBLE: By keeping it visible, it sits between
-                                        // headerCard and mainTemple, pushing your temple image down
-                                        // into the layout space so everything doesn't crunch at the top.
-//                                        if (vSpace != null) vSpace.setVisibility(View.VISIBLE);
                                         if (mainTemple != null) mainTemple.setVisibility(View.VISIBLE);
 
-                                        // Apply updated structural calculation metrics
                                         view.measure(View.MeasureSpec.makeMeasureSpec(nW, View.MeasureSpec.EXACTLY),
                                                 View.MeasureSpec.makeMeasureSpec(nH, View.MeasureSpec.EXACTLY));
                                         view.layout(0, 0, nW, nH);
@@ -533,7 +569,6 @@ public class VideoGenerator {
                                     }
 
                                 } else {
-                                    // --- SCENE 1: Status Card Details ---
                                     if (mainImage.getVisibility() == View.GONE) {
                                         mainImage.setVisibility(View.VISIBLE);
                                         tvType.setVisibility(View.VISIBLE);
@@ -541,7 +576,6 @@ public class VideoGenerator {
                                         tvDesc.setVisibility(View.VISIBLE);
                                         dateBar.setVisibility(View.VISIBLE);
 
-//                                        if (vSpace != null) vSpace.setVisibility(View.VISIBLE);
                                         if (mainTemple != null) mainTemple.setVisibility(View.GONE);
 
                                         view.measure(View.MeasureSpec.makeMeasureSpec(nW, View.MeasureSpec.EXACTLY),

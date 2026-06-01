@@ -1,9 +1,11 @@
 package com.gurukul.Utils;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Typeface;
 import android.media.MediaCodec;
 import android.media.MediaCodecInfo;
 import android.media.MediaCodecList;
@@ -15,6 +17,7 @@ import android.os.HandlerThread;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -136,7 +139,7 @@ public class VideoGeneratorNew {
                         tvName.setText(status.getName());
                         tvDesc.setText(status.getDescription());
                         tvDate.setText(DateConverterHindi.convertToHindi(status.getDate()));
-
+                        applyFontToViewGroup(context, (ViewGroup) v);
                         String imgPath = status.getImagePath();
                         if (imgPath != null && !imgPath.isEmpty()) {
                             File imgFile = new File(imgPath);
@@ -275,7 +278,7 @@ public class VideoGeneratorNew {
                             tvName.setText(status.getName());
                             tvDesc.setText(status.getDescription());
                             tvDate.setText(DateConverterHindi.convertToHindi(status.getDate()));
-
+                            applyFontToViewGroup(context, (ViewGroup) v);
                             if (footerCard != null) { footerCard.setAlpha(0f); }
                             if (headerCard != null) { headerCard.setAlpha(1f); headerCard.setTranslationY(0f); }
                             mainImage.setAlpha(1f);
@@ -391,7 +394,7 @@ public class VideoGeneratorNew {
                         tvName.setText(status.getName());
                         tvDesc.setText(status.getDescription());
                         tvDate.setText(DateConverterHindi.convertToHindi(status.getDate()));
-
+                        applyFontToViewGroup(context, (ViewGroup) v);
                         String imgPath = status.getImagePath();
                         if (imgPath != null && !imgPath.isEmpty()) {
                             File imgFile = new File(imgPath);
@@ -658,5 +661,43 @@ public class VideoGeneratorNew {
                 handlerThread.quitSafely();
             }
         }).start();
+    }
+    private static void applyFontToViewGroup(Context context, ViewGroup vg) {
+        if (vg == null) return;
+        for (int i = 0; i < vg.getChildCount(); i++) {
+            View child = vg.getChildAt(i);
+            if (child instanceof TextView) {
+                applyFont(context, (TextView) child);
+            } else if (child instanceof ViewGroup) {
+                applyFontToViewGroup(context, (ViewGroup) child);
+            }
+        }
+    }
+
+    private static void applyFont(Context context, TextView tv) {
+        if (tv == null) return;
+        SharedPreferences prefs = context.getSharedPreferences("AppPrefs", Context.MODE_PRIVATE);
+        String font = prefs.getString("font_family", "default");
+
+        Typeface typeface;
+        switch (font) {
+            case "serif":
+                typeface = Typeface.SERIF;
+                break;
+            case "monospace":
+                typeface = Typeface.MONOSPACE;
+                break;
+            case "sans-serif":
+                typeface = Typeface.SANS_SERIF;
+                break;
+            default:
+                typeface = Typeface.DEFAULT;
+                break;
+        }
+
+        int existingStyle = tv.getTypeface() != null
+                ? tv.getTypeface().getStyle()
+                : Typeface.NORMAL;
+        tv.setTypeface(typeface, existingStyle);
     }
 }
