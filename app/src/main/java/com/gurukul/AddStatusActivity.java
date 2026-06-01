@@ -148,11 +148,21 @@ public class AddStatusActivity extends AppCompatActivity {
 
     private void setupSpinner() {
         String[] types = {"जन्मदिन के अवसर पर", "विवाह वर्षगांठ के अवसर पर", "पुण्यतिथि के अवसर पर","स्थाई शान्तिधारा एवं पूजन", "अन्य"};
-        ArrayAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, types);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, types);
         spinnerType.setAdapter(adapter);
+
+
+        spinnerType.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus && spinnerType.getText().toString().isEmpty()) {
+                spinnerType.showDropDown();
+            }
+        });
+        spinnerType.setOnClickListener(v -> spinnerType.showDropDown());
+
         spinnerType.setOnItemClickListener((parent, view, position, id) -> {
-            updateOccasionUI(types[position]);
+
+            String selectedType = (String) parent.getItemAtPosition(position);
+            updateOccasionUI(selectedType);
         });
     }
 

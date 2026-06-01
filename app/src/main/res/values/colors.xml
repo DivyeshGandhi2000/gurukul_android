@@ -6,4 +6,6 @@
     <color name="lightgray">#737375</color>
     <color name="primary_light">#40ea8224</color>
     <color name="primary_new">#10ea8224</color>
+    <color name="material_border_color">#E5E7EB</color>
+
 </resources>

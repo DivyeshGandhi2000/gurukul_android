@@ -136,95 +136,17 @@
                         android:scaleType="centerCrop"
                         android:src="@drawable/right_temple_image" />
                 </LinearLayout>
-                <ImageView
-                    android:layout_width="320dp"
-                    android:layout_height="180dp"
-                    android:alpha="0.8"
-                    android:layout_marginTop="10dp"
-                    android:contentDescription="Right Temple Image"
-                    android:id="@+id/mainTemple"
-                    android:visibility="gone"
-                    android:layout_gravity="center"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/img" />
-
-                <ImageView
-                    android:id="@+id/image"
-                    android:layout_width="match_parent"
-                    android:layout_height="180dp"
-                    android:layout_marginTop="10dp"
-                    android:contentDescription="Temple Event Photo"
-                    android:scaleType="fitCenter" />
-
-                <TextView
-                    android:id="@+id/type"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:gravity="center"
-                    android:text="जन्मदिन के अवसर पर"
-                    android:textColor="#000000"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="Name"
-                    android:textColor="#000000"
-                    android:textSize="14sp" />
-
-                <TextView
-                    android:id="@+id/discription"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="Discription"
-                    android:textColor="#8B0000"
-                    android:textSize="14sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/dateBar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:layout_marginHorizontal="5dp"
-                android:background="@drawable/datebar_gradient_new"
-                android:orientation="vertical"
-
-                android:padding="10dp">
-
-                <TextView
-                    android:id="@+id/date"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="शुक्रवार 26 दिसंबर 2025"
-                    android:textColor="#FFFFFF"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:id="@+id/tvDateBarOrg"
-                    android:text="श्री भट्टारक यशकीर्ति दिगम्बर जैन धर्मार्थ ट्रस्ट गुरुकुल ऋषभदेव"
-                    android:textColor="#FFFFFF"
-                    android:textSize="14sp" />
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="www.gurukul-rishabhdeo.com"
-                    android:textColor="#FFFFFF"
-                    android:textSize="14sp" />
 
             </LinearLayout>
 
+            <ImageView
+                android:layout_width="300dp"
+                android:layout_height="150dp"
+                android:contentDescription="Right Temple Image"
+                android:id="@+id/mainTemple"
+                android:layout_gravity="center"
+                android:scaleType="centerCrop"
+                android:src="@drawable/img" />
 
             <LinearLayout
                 android:id="@+id/footerCard"

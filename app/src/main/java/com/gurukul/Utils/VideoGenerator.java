@@ -113,13 +113,18 @@ public class VideoGenerator {
                                 .inflate(R.layout.item_video_new_xml, null);
 
                         ImageView    mainImage  = v.findViewById(R.id.image);
+                        ImageView    mainTemple = v.findViewById(R.id.mainTemple);
                         TextView     tvType     = v.findViewById(R.id.type);
                         TextView     tvName     = v.findViewById(R.id.name);
                         TextView     tvDesc     = v.findViewById(R.id.discription);
                         TextView     tvDate     = v.findViewById(R.id.date);
                         LinearLayout footerCard = v.findViewById(R.id.footerCard);
+//                        View         vSpace     = v.findViewById(R.id.vSpace);
 
+                        // Thumbnail represents Scene 1 components
                         if (footerCard != null) footerCard.setVisibility(View.GONE);
+                        if (mainTemple != null) mainTemple.setVisibility(View.GONE);
+//                        if (vSpace != null) vSpace.setVisibility(View.VISIBLE);
 
                         String typeText = status.getType();
                         if (typeText != null && typeText.equals("अन्य")) {
@@ -236,13 +241,8 @@ public class VideoGenerator {
                 int            nativeWidth = metrics.widthPixels;
                 int            nativeHeight= (nativeWidth * 16) / 9;
 
-                // ---------------------------------------------------------------
-                // WARMUP: draw REAL thumbnail frame so the first encoded frame
-                // (which leaks into the stream on Android 15) is already your
-                // thumbnail — not a blank white frame.
-                // ---------------------------------------------------------------
+                // WARMUP
                 {
-                    // Build the thumbnail view on the handler thread
                     CountDownLatch warmupLatch = new CountDownLatch(1);
                     AtomicReference<View> warmupViewRef = new AtomicReference<>();
 
@@ -252,6 +252,7 @@ public class VideoGenerator {
                                     .inflate(R.layout.item_video_new_xml, null);
 
                             ImageView    mainImage  = v.findViewById(R.id.image);
+                            ImageView    mainTemple = v.findViewById(R.id.mainTemple);
                             TextView     tvType     = v.findViewById(R.id.type);
                             TextView     tvName     = v.findViewById(R.id.name);
                             TextView     tvDesc     = v.findViewById(R.id.discription);
@@ -259,8 +260,11 @@ public class VideoGenerator {
                             LinearLayout footerCard = v.findViewById(R.id.footerCard);
                             LinearLayout headerCard = v.findViewById(R.id.headerCard);
                             TextView     tvWebsite  = v.findViewById(R.id.tvWebsiteUrl);
+//                            View         vSpace     = v.findViewById(R.id.vSpace);
 
-                            // Full-visible state (same as frame 0 in the loop)
+                            if (mainTemple != null) mainTemple.setVisibility(View.GONE);
+//                            if (vSpace != null) vSpace.setVisibility(View.VISIBLE);
+
                             String typeText = status.getType();
                             if (typeText != null && typeText.equals("अन्य")) {
                                 tvType.setVisibility(View.GONE);
@@ -272,8 +276,7 @@ public class VideoGenerator {
                             tvDesc.setText(status.getDescription());
                             tvDate.setText(DateConverterHindi.convertToHindi(status.getDate()));
 
-                            // All elements fully visible / reset
-                            if (footerCard != null) { footerCard.setAlpha(0f); } // Hides footer in the video's thumbnail frame
+                            if (footerCard != null) { footerCard.setAlpha(0f); }
                             if (headerCard != null) { headerCard.setAlpha(1f); headerCard.setTranslationY(0f); }
                             mainImage.setAlpha(1f);
                             mainImage.setScaleX(1f);
@@ -282,9 +285,7 @@ public class VideoGenerator {
                             tvName.setAlpha(1f); tvName.setTranslationY(0f);
                             tvDesc.setAlpha(1f); tvDesc.setTranslationY(0f);
                             if (tvWebsite != null) {
-                                tvWebsite.setAlpha(1f);
-                                tvWebsite.setScaleX(1f);
-                                tvWebsite.setScaleY(1f);
+                                tvWebsite.setAlpha(0f);
                             }
 
                             String imgPath = status.getImagePath();
@@ -315,7 +316,6 @@ public class VideoGenerator {
 
                     warmupLatch.await();
 
-                    // Draw thumbnail content onto the warmup surface canvas
                     Canvas warmupCanvas = inputSurface.lockCanvas(null);
                     if (warmupCanvas != null) {
                         warmupCanvas.drawColor(0xFFFFFFFF);
@@ -326,7 +326,6 @@ public class VideoGenerator {
                         inputSurface.unlockCanvasAndPost(warmupCanvas);
                     }
 
-                    // Drain encoder until output format is signalled
                     MediaCodec.BufferInfo warmupInfo = new MediaCodec.BufferInfo();
                     boolean formatReceived = false;
                     int attempts = 0;
@@ -342,12 +341,8 @@ public class VideoGenerator {
                         attempts++;
                     }
                     if (!formatReceived)
-                        throw new Exception("Encoder warmup failed after 500 attempts. "
-                                + "Device encoder not supported.");
+                        throw new Exception("Encoder warmup failed after 500 attempts.");
                 }
-                // ---------------------------------------------------------------
-                // END WARMUP
-                // ---------------------------------------------------------------
 
                 muxer = new MediaMuxer(
                         outputFile.getAbsolutePath(),
@@ -359,6 +354,7 @@ public class VideoGenerator {
                 CountDownLatch viewLatch = new CountDownLatch(1);
                 AtomicReference<View>         viewRef       = new AtomicReference<>();
                 AtomicReference<ImageView>    mainImageRef  = new AtomicReference<>();
+                AtomicReference<ImageView>    mainTempleRef = new AtomicReference<>();
                 AtomicReference<TextView>     tvTypeRef     = new AtomicReference<>();
                 AtomicReference<TextView>     tvNameRef     = new AtomicReference<>();
                 AtomicReference<TextView>     tvDescRef     = new AtomicReference<>();
@@ -366,6 +362,7 @@ public class VideoGenerator {
                 AtomicReference<LinearLayout> footerCardRef = new AtomicReference<>();
                 AtomicReference<LinearLayout> headerCardRef = new AtomicReference<>();
                 AtomicReference<TextView>     tvWebsiteRef  = new AtomicReference<>();
+//                AtomicReference<View>         vSpaceRef     = new AtomicReference<>();
 
                 viewHandler.post(() -> {
                     try {
@@ -373,6 +370,7 @@ public class VideoGenerator {
                                 .inflate(R.layout.item_video_new_xml, null);
 
                         ImageView    mainImage  = v.findViewById(R.id.image);
+                        ImageView    mainTemple = v.findViewById(R.id.mainTemple);
                         TextView     tvType     = v.findViewById(R.id.type);
                         TextView     tvName     = v.findViewById(R.id.name);
                         TextView     tvDesc     = v.findViewById(R.id.discription);
@@ -381,6 +379,7 @@ public class VideoGenerator {
                         LinearLayout footerCard = v.findViewById(R.id.footerCard);
                         LinearLayout headerCard = v.findViewById(R.id.headerCard);
                         TextView     tvWebsite  = v.findViewById(R.id.tvWebsiteUrl);
+//                        View         vSpace     = v.findViewById(R.id.vSpace);
 
                         String typeText = status.getType();
                         if (typeText != null && typeText.equals("अन्य")) {
@@ -417,6 +416,7 @@ public class VideoGenerator {
 
                         viewRef.set(v);
                         mainImageRef.set(mainImage);
+                        mainTempleRef.set(mainTemple);
                         tvTypeRef.set(tvType);
                         tvNameRef.set(tvName);
                         tvDescRef.set(tvDesc);
@@ -424,6 +424,7 @@ public class VideoGenerator {
                         footerCardRef.set(footerCard);
                         headerCardRef.set(headerCard);
                         tvWebsiteRef.set(tvWebsite);
+//                        vSpaceRef.set(vSpace);
                     } finally {
                         viewLatch.countDown();
                     }
@@ -433,6 +434,7 @@ public class VideoGenerator {
 
                 View         view       = viewRef.get();
                 ImageView    mainImage  = mainImageRef.get();
+                ImageView    mainTemple = mainTempleRef.get();
                 TextView     tvType     = tvTypeRef.get();
                 TextView     tvName     = tvNameRef.get();
                 TextView     tvDesc     = tvDescRef.get();
@@ -440,6 +442,7 @@ public class VideoGenerator {
                 LinearLayout footerCard = footerCardRef.get();
                 LinearLayout headerCard = headerCardRef.get();
                 TextView     tvWebsite  = tvWebsiteRef.get();
+//                View         vSpace     = vSpaceRef.get();
 
                 MediaCodec.BufferInfo bufferInfo = new MediaCodec.BufferInfo();
                 long presentationTimeUs = 0L;
@@ -454,7 +457,15 @@ public class VideoGenerator {
                     viewHandler.post(() -> {
                         try {
                             if (frame == 0) {
-                                // Frame 0 = Thumbnail. Keep everything fully visible.
+                                // Frame 0 = Thumbnail Setup (Scene 1)
+                                if (mainTemple != null) mainTemple.setVisibility(View.GONE);
+//                                if (vSpace != null) vSpace.setVisibility(View.VISIBLE);
+                                mainImage.setVisibility(View.VISIBLE);
+                                tvType.setVisibility(View.VISIBLE);
+                                tvName.setVisibility(View.VISIBLE);
+                                tvDesc.setVisibility(View.VISIBLE);
+                                dateBar.setVisibility(View.VISIBLE);
+
                                 footerCard.setAlpha(0f);
                                 headerCard.setAlpha(1f);
                                 dateBar.setAlpha(1f);
@@ -470,57 +481,105 @@ public class VideoGenerator {
                                 tvName.setTranslationY(0f);
                                 tvDesc.setTranslationY(0f);
                                 if (tvWebsite != null) {
-                                    tvWebsite.setAlpha(1f);
-                                    tvWebsite.setScaleX(1f);
-                                    tvWebsite.setScaleY(1f);
+                                    tvWebsite.setAlpha(0f);
                                 }
                             } else {
-                                // Animation starts from frame 1
                                 float tAnim = (float) (frame - 1) / (totalFrames - 1);
-                                float dateIn    = easeOutCubic(window(tAnim, 0.00f, 0.06f));
-                                float headerIn  = easeOutBack (window(tAnim, 0.03f, 0.10f));
-                                float imgIn     = easeOutCubic(window(tAnim, 0.06f, 0.13f));
-                                float typeIn    = easeOutCubic(window(tAnim, 0.10f, 0.16f));
-                                float nameIn    = easeOutCubic(window(tAnim, 0.12f, 0.18f));
-                                float descIn    = easeOutCubic(window(tAnim, 0.14f, 0.20f));
-                                float fadeOut   = easeOutCubic(window(tAnim, 0.60f, 0.68f));
-                                float footerIn  = easeOutBack (window(tAnim, 0.70f, 0.82f));
-                                float websiteIn = easeOutBack (window(tAnim, 0.84f, 0.94f));
+                                boolean isScene2 = (tAnim > 0.55f);
 
-                                dateBar.setTranslationX(nW * (1f - dateIn) - (nW * fadeOut));
-                                dateBar.setAlpha(Math.max(0f, dateIn - fadeOut));
+                                if (isScene2) {
+                                    // --- SCENE 2: The Temple and Footer Cards ---
+                                    if (mainImage.getVisibility() == View.VISIBLE) {
+                                        mainImage.setVisibility(View.GONE);
+                                        tvType.setVisibility(View.GONE);
+                                        tvName.setVisibility(View.GONE);
+                                        tvDesc.setVisibility(View.GONE);
+                                        dateBar.setVisibility(View.GONE);
 
-                                headerCard.setTranslationY(-200f * (1f - headerIn));
-                                headerCard.setAlpha(Math.min(1f,
-                                        window(tAnim, 0.03f, 0.10f) * 2f));
+                                        // KEEP SPACE VISIBLE: By keeping it visible, it sits between
+                                        // headerCard and mainTemple, pushing your temple image down
+                                        // into the layout space so everything doesn't crunch at the top.
+//                                        if (vSpace != null) vSpace.setVisibility(View.VISIBLE);
+                                        if (mainTemple != null) mainTemple.setVisibility(View.VISIBLE);
 
-                                float imgScale = 0.70f + 0.30f * imgIn - 0.30f * fadeOut;
-                                mainImage.setScaleX(imgScale);
-                                mainImage.setScaleY(imgScale);
-                                mainImage.setAlpha(Math.max(0f, imgIn - fadeOut));
+                                        // Apply updated structural calculation metrics
+                                        view.measure(View.MeasureSpec.makeMeasureSpec(nW, View.MeasureSpec.EXACTLY),
+                                                View.MeasureSpec.makeMeasureSpec(nH, View.MeasureSpec.EXACTLY));
+                                        view.layout(0, 0, nW, nH);
+                                    }
 
-                                tvType.setAlpha(Math.max(0f, typeIn - fadeOut));
-                                tvType.setTranslationY(30f * (1f - typeIn) - 30f * fadeOut);
+                                    float scene2Anim = window(tAnim, 0.55f, 1.0f);
+                                    float templeIn   = easeOutCubic(window(scene2Anim, 0.05f, 0.25f));
+                                    float footerIn   = easeOutBack (window(scene2Anim, 0.25f, 0.60f));
+                                    float websiteIn  = easeOutBack (window(scene2Anim, 0.60f, 0.90f));
 
-                                tvName.setAlpha(Math.max(0f, nameIn - fadeOut));
-                                tvName.setTranslationY(30f * (1f - nameIn) - 30f * fadeOut);
+                                    headerCard.setAlpha(1f);
+                                    headerCard.setTranslationY(0f);
 
-                                tvDesc.setAlpha(Math.max(0f, descIn - fadeOut));
-                                tvDesc.setTranslationY(30f * (1f - descIn) - 30f * fadeOut);
+                                    if (mainTemple != null) {
+                                        mainTemple.setAlpha(templeIn);
+                                        mainTemple.setScaleX(0.8f + 0.2f * templeIn);
+                                        mainTemple.setScaleY(0.8f + 0.2f * templeIn);
+                                    }
 
-                                float footerCenterTargetTransY =
-                                        (nH / 2f) - (footerCard.getTop()
-                                                + footerCard.getHeight() / 2f);
-                                footerCard.setTranslationY(
-                                        nH + (footerCenterTargetTransY - nH) * footerIn);
-                                footerCard.setAlpha(footerIn);
+                                    footerCard.setAlpha(footerIn);
+                                    footerCard.setTranslationY(100f * (1f - footerIn));
 
-                                if (tvWebsite != null) {
-                                    tvWebsite.setAlpha(Math.min(1f,
-                                            Math.max(0.4f, websiteIn)));
-                                    float scale = 0.5f + 0.5f * Math.min(1f, websiteIn);
-                                    tvWebsite.setScaleX(scale);
-                                    tvWebsite.setScaleY(scale);
+                                    if (tvWebsite != null) {
+                                        tvWebsite.setAlpha(Math.min(1f, Math.max(0f, websiteIn)));
+                                        float scale = 0.5f + 0.5f * websiteIn;
+                                        tvWebsite.setScaleX(scale);
+                                        tvWebsite.setScaleY(scale);
+                                    }
+
+                                } else {
+                                    // --- SCENE 1: Status Card Details ---
+                                    if (mainImage.getVisibility() == View.GONE) {
+                                        mainImage.setVisibility(View.VISIBLE);
+                                        tvType.setVisibility(View.VISIBLE);
+                                        tvName.setVisibility(View.VISIBLE);
+                                        tvDesc.setVisibility(View.VISIBLE);
+                                        dateBar.setVisibility(View.VISIBLE);
+
+//                                        if (vSpace != null) vSpace.setVisibility(View.VISIBLE);
+                                        if (mainTemple != null) mainTemple.setVisibility(View.GONE);
+
+                                        view.measure(View.MeasureSpec.makeMeasureSpec(nW, View.MeasureSpec.EXACTLY),
+                                                View.MeasureSpec.makeMeasureSpec(nH, View.MeasureSpec.EXACTLY));
+                                        view.layout(0, 0, nW, nH);
+                                    }
+
+                                    float scene1Anim = window(tAnim, 0.0f, 0.55f);
+                                    float dateIn    = easeOutCubic(window(scene1Anim, 0.00f, 0.15f));
+                                    float headerIn  = easeOutBack (window(scene1Anim, 0.05f, 0.20f));
+                                    float imgIn     = easeOutCubic(window(scene1Anim, 0.10f, 0.25f));
+                                    float typeIn    = easeOutCubic(window(scene1Anim, 0.15f, 0.30f));
+                                    float nameIn    = easeOutCubic(window(scene1Anim, 0.20f, 0.35f));
+                                    float descIn    = easeOutCubic(window(scene1Anim, 0.25f, 0.40f));
+                                    float fadeOut   = easeOutCubic(window(scene1Anim, 0.85f, 1.00f));
+
+                                    dateBar.setTranslationX(nW * (1f - dateIn) - (nW * fadeOut));
+                                    dateBar.setAlpha(Math.max(0f, dateIn - fadeOut));
+
+                                    headerCard.setTranslationY(-200f * (1f - headerIn));
+                                    headerCard.setAlpha(Math.min(1f, window(scene1Anim, 0.05f, 0.20f) * 2f));
+
+                                    float imgScale = 0.70f + 0.30f * imgIn - 0.30f * fadeOut;
+                                    mainImage.setScaleX(imgScale);
+                                    mainImage.setScaleY(imgScale);
+                                    mainImage.setAlpha(Math.max(0f, imgIn - fadeOut));
+
+                                    tvType.setAlpha(Math.max(0f, typeIn - fadeOut));
+                                    tvType.setTranslationY(30f * (1f - typeIn) - 30f * fadeOut);
+
+                                    tvName.setAlpha(Math.max(0f, nameIn - fadeOut));
+                                    tvName.setTranslationY(30f * (1f - nameIn) - 30f * fadeOut);
+
+                                    tvDesc.setAlpha(Math.max(0f, descIn - fadeOut));
+                                    tvDesc.setTranslationY(30f * (1f - descIn) - 30f * fadeOut);
+
+                                    footerCard.setAlpha(0f);
+                                    if (tvWebsite != null) tvWebsite.setAlpha(0f);
                                 }
                             }
                             view.layout(0, 0, nW, nH);
@@ -593,9 +652,9 @@ public class VideoGenerator {
                 android.util.Log.e("VideoGenerator", "FAILED: " + e.getMessage(), e);
                 if (callback != null) callback.onError(e);
             } finally {
-                try { if (encoder       != null) { encoder.stop();       encoder.release();       } } catch (Exception ignored) {}
-                try { if (muxer         != null) { muxer.stop();         muxer.release();         } } catch (Exception ignored) {}
-                try { if (audioExtractor!= null) { audioExtractor.release();                      } } catch (Exception ignored) {}
+                try { if (encoder        != null) { encoder.stop();       encoder.release();       } } catch (Exception ignored) {}
+                try { if (muxer          != null) { muxer.stop();         muxer.release();         } } catch (Exception ignored) {}
+                try { if (audioExtractor != null) { audioExtractor.release();                      } } catch (Exception ignored) {}
                 handlerThread.quitSafely();
             }
         }).start();

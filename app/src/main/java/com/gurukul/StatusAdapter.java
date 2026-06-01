@@ -42,6 +42,7 @@ public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.ViewHolder
     private Context context;
     private List<Status> statusList;
     private DatabaseHelper dbHelper;
+    private Uri lastSavedVideoUri;
 
     public StatusAdapter(Context context, List<Status> statusList, DatabaseHelper dbHelper) {
         this.context = context;
@@ -105,6 +106,87 @@ public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.ViewHolder
             intent.putExtra("STATUS_ID", status.getId());
             v.getContext().startActivity(intent);
         });
+//        holder.btndownload.setOnClickListener(v -> {
+//            ProgressDialog progressDialog = new ProgressDialog(context);
+//            progressDialog.setTitle("Creating Video");
+//            progressDialog.setMessage("Rendering frame 0%");
+//            progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+//            progressDialog.setMax(100);
+//            progressDialog.setCancelable(false);
+//            progressDialog.show();
+//
+//            SharedPreferences prefs = context.getSharedPreferences("AppPrefs", Context.MODE_PRIVATE);
+//            String videoColor = prefs.getString("video_color", "blue");
+//
+//            if ("brown".equals(videoColor)) {
+//                VideoGeneratorNew.createAnimatedVideo(context, status, new VideoGeneratorNew.VideoGenerationCallback() {
+//                    @Override
+//                    public void onProgress(int percentage) {
+//                        ((Activity) context).runOnUiThread(() -> {
+//                            progressDialog.setProgress(percentage);
+//                            progressDialog.setMessage("Rendering frame " + percentage + "%");
+//                        });
+//                    }
+//
+//                    @Override
+//                    public void onFinished(File videoFile) {
+//                        ((Activity) context).runOnUiThread(() -> {
+//                            progressDialog.dismiss();
+//                            // FIX: Save to MediaStore first to generate thumbnail
+//                            Uri savedUri = saveVideoToDownloadsAndGetUri(context, videoFile);
+//                            if (savedUri!= null) {
+//                                shareVideoUri(context, savedUri);
+//                            } else {
+//                                shareVideo(context, videoFile); // fallback
+//                            }
+//                        });
+//                    }
+//
+//                    @Override
+//                    public void onError(Exception e) {
+//                        ((Activity) context).runOnUiThread(() -> {
+//                            progressDialog.dismiss();
+//                            android.util.Log.e("VideoGen", "Failed", e);
+//                            Toast.makeText(context, "Error: " + e.getClass().getSimpleName() + "\n" + e.getMessage(), Toast.LENGTH_LONG).show();
+//                        });
+//                    }
+//                });
+//
+//            } else {
+//                VideoGenerator.createAnimatedVideo(context, status, new VideoGenerator.VideoGenerationCallback() {
+//                    @Override
+//                    public void onProgress(int percentage) {
+//                        ((Activity) context).runOnUiThread(() -> {
+//                            progressDialog.setProgress(percentage);
+//                            progressDialog.setMessage("Rendering frame " + percentage + "%");
+//                        });
+//                    }
+//
+//                    @Override
+//                    public void onFinished(File videoFile) {
+//                        ((Activity) context).runOnUiThread(() -> {
+//                            progressDialog.dismiss();
+//                            // FIX: Save to MediaStore first to generate thumbnail
+//                            Uri savedUri = saveVideoToDownloadsAndGetUri(context, videoFile);
+//                            if (savedUri!= null) {
+//                                shareVideoUri(context, savedUri);
+//                            } else {
+//                                shareVideo(context, videoFile); // fallback
+//                            }
+//                        });
+//                    }
+//
+//                    @Override
+//                    public void onError(Exception e) {
+//                        ((Activity) context).runOnUiThread(() -> {
+//                            progressDialog.dismiss();
+//                            android.util.Log.e("VideoGen", "Failed", e);
+//                            Toast.makeText(context, "Error: " + e.getClass().getSimpleName() + "\n" + e.getMessage(), Toast.LENGTH_LONG).show();
+//                        });
+//                    }
+//                });
+//            }
+//        });
         holder.btndownload.setOnClickListener(v -> {
             ProgressDialog progressDialog = new ProgressDialog(context);
             progressDialog.setTitle("Creating Video");
@@ -118,6 +200,7 @@ public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.ViewHolder
             String videoColor = prefs.getString("video_color", "blue");
 
             if ("brown".equals(videoColor)) {
+                // Must strictly use VideoGeneratorNew's callback
                 VideoGeneratorNew.createAnimatedVideo(context, status, new VideoGeneratorNew.VideoGenerationCallback() {
                     @Override
                     public void onProgress(int percentage) {
@@ -131,12 +214,11 @@ public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.ViewHolder
                     public void onFinished(File videoFile) {
                         ((Activity) context).runOnUiThread(() -> {
                             progressDialog.dismiss();
-                            // FIX: Save to MediaStore first to generate thumbnail
-                            Uri savedUri = saveVideoToDownloadsAndGetUri(context, videoFile);
-                            if (savedUri!= null) {
-                                shareVideoUri(context, savedUri);
+                            lastSavedVideoUri = saveVideoToDownloadsAndGetUri(context, videoFile);
+                            if (lastSavedVideoUri != null) {
+                                Toast.makeText(context, "Video saved to gallery successfully!", Toast.LENGTH_LONG).show();
                             } else {
-                                shareVideo(context, videoFile); // fallback
+                                Toast.makeText(context, "Failed to save video.", Toast.LENGTH_SHORT).show();
                             }
                         });
                     }
@@ -145,13 +227,14 @@ public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.ViewHolder
                     public void onError(Exception e) {
                         ((Activity) context).runOnUiThread(() -> {
                             progressDialog.dismiss();
-                            android.util.Log.e("VideoGen", "Failed", e);
-                            Toast.makeText(context, "Error: " + e.getClass().getSimpleName() + "\n" + e.getMessage(), Toast.LENGTH_LONG).show();
+                            Log.e("VideoGen", "Failed", e);
+                            Toast.makeText(context, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
                         });
                     }
                 });
 
             } else {
+                // Must strictly use VideoGenerator's callback
                 VideoGenerator.createAnimatedVideo(context, status, new VideoGenerator.VideoGenerationCallback() {
                     @Override
                     public void onProgress(int percentage) {
@@ -165,12 +248,11 @@ public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.ViewHolder
                     public void onFinished(File videoFile) {
                         ((Activity) context).runOnUiThread(() -> {
                             progressDialog.dismiss();
-                            // FIX: Save to MediaStore first to generate thumbnail
-                            Uri savedUri = saveVideoToDownloadsAndGetUri(context, videoFile);
-                            if (savedUri!= null) {
-                                shareVideoUri(context, savedUri);
+                            lastSavedVideoUri = saveVideoToDownloadsAndGetUri(context, videoFile);
+                            if (lastSavedVideoUri != null) {
+                                Toast.makeText(context, "Video saved to gallery successfully!", Toast.LENGTH_LONG).show();
                             } else {
-                                shareVideo(context, videoFile); // fallback
+                                Toast.makeText(context, "Failed to save video.", Toast.LENGTH_SHORT).show();
                             }
                         });
                     }
@@ -179,8 +261,8 @@ public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.ViewHolder
                     public void onError(Exception e) {
                         ((Activity) context).runOnUiThread(() -> {
                             progressDialog.dismiss();
-                            android.util.Log.e("VideoGen", "Failed", e);
-                            Toast.makeText(context, "Error: " + e.getClass().getSimpleName() + "\n" + e.getMessage(), Toast.LENGTH_LONG).show();
+                            Log.e("VideoGen", "Failed", e);
+                            Toast.makeText(context, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
                         });
                     }
                 });
@@ -684,5 +766,13 @@ public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.ViewHolder
             btnDelete = itemView.findViewById(R.id.btnDelete);
             btnEdit = itemView.findViewById(R.id.btnEdit);
         }
+    }
+    // Add this inside your StatusAdapter class
+    public void updateList(List<Status> filteredList) {
+        // Overwrite the current list with the filtered results
+        this.statusList = filteredList; // assuming your internal list is named statusList
+
+        // Notify the RecyclerView to refresh
+        notifyDataSetChanged();
     }
 }

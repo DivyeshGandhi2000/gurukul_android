@@ -4,14 +4,61 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F5F5F5">
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/searchBarCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="12dp"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="1dp"
+        app:strokeColor="@color/material_border_color"
+        app:strokeWidth="1dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="16dp"
+            android:paddingEnd="12dp">
+
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_marginEnd="12dp"
+                android:src="@drawable/baseline_manage_search_24"
+                app:tint="@color/primary" />
+
+            <EditText
+                android:id="@+id/inlineSearchInput"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@null"
+                android:hint="Search by Name/ Date"
+                android:imeOptions="actionSearch"
+                android:includeFontPadding="false"
+                android:inputType="textPersonName"
+                android:maxLines="1"
+                android:textColor="@color/primary"
+                android:textColorHint="@color/primary"
+                android:textSize="14sp" />
+
+          </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/btnAdd"
+        android:layout_below="@+id/searchBarCard"
+        android:layout_marginTop="0dp"
         android:clipToPadding="false"
-        android:padding="8dp" />
+         />
 
     <Button
         android:id="@+id/btnAdd"
