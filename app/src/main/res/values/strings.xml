@@ -3,341 +3,53 @@
     <string name="attendenceMarkAt">Last Recorded Time:</string>
     <string name="already_member">Already a member ?</string>
     <string name="address">Address</string>
-    <string name="logout_message">Are you sure you want to log out?</string>
-    <string name="choose_language_message">Which language would you like to choose?</string>
-    <string name="manual_punch_message">You missed your morning punch. Do you want to add it manually?</string>
-    <string name="manual_punch">Manual Punch</string>
-    <string name="loading_leaves">Loading leaves...</string>
-    <string name="failed_to_fetch_leaves">Failed to fetch leaves</string>
-    <string name="loading_leave_balance">Loading leave balance...</string>
-    <string name="loading_attendance_data">Loading attendance data...</string>
-    <string name="employee_id_or_token_not_found">Employee ID or token not found</string>
-    <string name="error_parsing_attendance_data">Error parsing attendance data</string>
-    <string name="no_records_selected_date">No records of selected date</string>
-    <string name="you_can_select_only_original_date">You can select only original date ±1 day</string>
-    <string name="only_day_allowed_from_original_date">Only ±1 day allowed from original date</string>
+    <string name="title_select_template">Select Print Template</string>
 
-    <string name="failed_to_load_attendance_data">Failed to load attendance data</string>
-    <string name="scan_button_desc">Scan attendance</string>
-    <string name="total_leave_desc">Total leave desc</string>
-    <string name="check_in">Check In</string>
-    <string name="remotePunch">Remote Punch</string>
-    <string name="check_out">Check Out</string>
-    <string name="check_in_time">Check In :</string>
-    <string name="check_out_time">Check Out :</string>
-    <string name="note_manual_punch">Note* \nThis may be verified by the admin to approve attendance.</string>
-    <string name="note_reset_password">Note*\nPassword must be at least 6 characters long and contain at least one uppercase letter and one special character (@#$%^&amp;+=!).</string>
-    <string name="please_enter_password">Please enter password</string>
-    <string name="passwords_do_not_match">Passwords do not match</string>
-    <string name="err_empty_password">Please enter and confirm your password</string>
-    <string name="err_password_complexity">Password must contain at least one uppercase letter and one special character</string>
-    <string name="err_password_length">Password must be at least 6 characters long</string>
+    <string name="template_classic_name">Classic Theme</string>
+    <string name="template_classic_desc">Red &amp; Cream styling</string>
 
-    <string name="updating_password">Updating password, please wait...</string>
-    <string name="no_data_found">No Data Found !</string>
-    <string name="attendance_processed">Attendance is being processed...</string>
-    <string name="location_permission_req">Location Permission Required</string>
-    <string name="permission_req">Permission Required</string>
-    <string name="location_permission_to_mark_attendence">This app needs location access to mark attendance.</string>
-    <string name="grant_permission">Grant Permission</string>
-    <string name="open_settings">Open Settings</string>
-    <string name="location_settings">Location permission is required for this app to work. Please enable it in app settings.</string>
-    <string name="app_wont_work_location_permission">App won\'t work properly without location permission.</string>
-    <string name="location_permission_denied">Location permission denied. App won\'t work properly.</string>
-    <string name="please_wait_some_minutes_before_marking_attendance_again">Please wait some minutes before marking attendance again</string>
+    <string name="template_modern_name">Modern Theme</string>
+    <string name="template_modern_desc">Deep Blue &amp; White</string>
 
-    <string name="manual_punch_message_in">You missed your check-in punch. Do you want to add it manually?</string>
-    <string name="manual_punch_message_out">You missed your check-out punch for yesterday shift. Do you want to add it manually?</string>
-    <string name="about_us_message">, we are passionate about delivering reliable and user-friendly solutions that make life easier and smarter. Our team is committed to building innovative digital experiences that solve real-world problems through technology.</string>
-    <string name="welcome_to">Welcome to </string>
-    <string name="add_button">add</string>
-    <string name="companyName">Company Name</string>
-    <string name="confirmPassword">Confirm Password</string>
-    <string name="companyCode">Company Code</string>
-    <string name="create_profile">Create your Account</string>
-    <string name="choose_language">Choose language</string>
-    <string name="location_error">Location Error</string>
-    <string name="location_feature">Please enable location services to use this feature.</string>
-    <string name="enable_location">Enable Location</string>
-    <string name="scan_qr_code">Scan QR Code</string>
-    <string name="invalid_qr_code">Invalid QR Code</string>
-    <string name="attendance_already_marked">Attendance already marked for this time.</string>
-    <string name="Unable_to_fetch_location">Unable to fetch location. Please try again.</string>
-    <string name="getting_current_gps_location">Getting current GPS location...</string>
-    <string name="you_are_out_of_company_location">You are out of company location.</string>
-    <string name="you_are_out_of_company_area">You are out of company area</string>
-    <string name="getting_precise_location">Getting precise location...</string>
-    <string name="Unable_to_get_precise_location">Unable to get precise location. Try again.</string>
-    <string name="camera_initialization_failed">Camera initialization failed</string>
-    <string name="camera_binding_failed">Camera binding failed</string>
-    <string name="requesting_location_permission">Step 1: Requesting location permission…</string>
-    <string name="requesting_background_permission">Step 2: Requesting background location…</string>
-    <string name="requesting_camera_permission">Step 3: Requesting camera permission…</string>
-    <string name="location_permission_granted">Location permission granted!</string>
-    <string name="all_permissions_granted">All permissions granted. You\'re ready to go!</string>
-    <string name="failed_to_scan_QR_code">Failed to scan QR code</string>
-    <string name="ensure_GPS_and_Internet_are_ON">Ensure GPS and Internet are ON</string>
-    <string name="waiting_for_precise_gps">Waiting for precise GPS (≤ %1$s m)... Please hold still.</string>
-    <string name="location_error_message">
-  Unable to get your current location. This might be due to:\n\n
-         • Poor GPS signal\n
-         • Location services just turned on\n
-         • Being indoors\n\n"
-        "Would you like to try again or use network location?"
-</string>
-    <string name="use_internet_Location">Use Internet Location</string>
-    <string name="try_gps_again">Try GPS Again</string>
-    <string name="location_permission_not_granted">Location permission not granted</string>
-    <string name="Invalid_time">Invalid time</string>
-    <string name="unable_to_fetch_location">Unable to fetch location. Please ensure GPS is enabled.</string>
-    <string name="from_date_cannot_be_after_to_date">From date cannot be after To date</string>
-    <string name="failed_to_build_request">Failed to build request</string>
-    <string name="leave_applied_successfully">Leave applied successfully</string>
-    <string name="failed_to_apply_leave">Failed to apply leave</string>
-    <string name="invalid_server_response">Invalid server response</string>
-    <string name="applying_for_leave">Applying for leave...</string>
-    <string name="error_parsing_employee_data">Error reading employee data</string>
-    <string name="date_range_selected_successfully">Date range selected successfully</string>
-    <string name="failed_to_load_profile">Failed to load profile</string>
-    <string name="location_not_available_please_try_again">Location not available. Please try again.</string>
-    <string name="failed_to_mark_attendance">Failed to mark attendance</string>
-    <string name="location_request_already_in_progress">Location request already in progress...</string>
-    <string name="getting_location_from_network">Getting location from network...</string>
-    <string name="missing_location_permission">Missing location permission.</string>
-    <string name="marking_attendance">Marking attendance...</string>
-    <string name="failed_due_to_some_internet_issue">Failed due to some internet issue. Please check your connection.</string>
-    <string name="request_timed_out">Request timed out. Please try again later.</string>
-    <string name="please_turn_on_location_to_scan_qr">Please turn on Location to scan QR.</string>
-    <string name="cancel">Cancel</string>
-    <string name="select_month_and_year">Select Month &amp; Year</string>
-    <string name="no">No</string>
-    <string name="yes">Yes</string>
+    <string name="template_gold_name">Premium Theme</string>
+    <string name="template_gold_desc">Dark Grey &amp; Gold</string>
 
-    <string name="Camera">Camera</string>
-    <string name="gallery">Gallery</string>
-    <string name="pdf">Pdf</string>
-    <string name="ok">OK</string>
-    <string name="dont_message">Don\'t have an account?</string>
-    <string name="email">Email Id</string>
-    <string name="firstName">First Name</string>
+    <string name="template_cyan_name">Modern Cyan</string>
+    <string name="template_cyan_desc">Blue &amp; White styling</string>
+    <string name="title_select_font">Select Font Style</string>
 
-    <string name="editprofile">Edit Profile</string>
-    <string name="empCode">Employee Code</string>
-    <string name="about">About</string>
-    <string name="documents_and_payslips">Documents &amp; Payslips</string>
-    <string name="payslips">Payslips</string>
-    <string name="settings">Settings</string>
+    <string name="font_default_name">System Default</string>
+    <string name="font_default_desc">Standard device font</string>
+
+    <string name="font_serif_name">Serif</string>
+    <string name="font_serif_desc">Elegant, classic typography</string>
+
+    <string name="font_mono_name">Monospace</string>
+    <string name="font_mono_desc">Typewriter-style fixed width</string>
+
+    <string name="font_sans_name">Sans-Serif</string>
+    <string name="font_sans_desc">Clean, modern typography</string>
+    <string name="title_select_video_color">Select Video Color</string>
+
+    <string name="video_color_blue_name">Blue Theme</string>
+    <string name="video_color_blue_desc">Cool, standard video styling</string>
+
+    <string name="video_color_brown_name">Brown Theme</string>
+    <string name="video_color_brown_desc">Warm, cinematic video styling</string>
     <string name="change_language">Change Language</string>
-    <string name="resetpassword">Reset Password</string>
-    <string name="faq">FAQs</string>
-    <string name="manual_attendance">Manual Attendance</string>
-    <string name="more">More</string>
-    <string name="punch_history">Punch History</string>
-    <string name="apply_leave">Apply Leave</string>
-    <string name="shift_time_range">%1$s → %2$s</string>
-    <string name="shift_duration_label">Duration: %1$s hrs</string>
-    <string name="shift_early_late">Early: %1$s  |  Late: %2$s</string>
-
-    <string name="apply_leave_sub">Submit a request for taking time off</string>
-    <string name="total_leave_sub">Leave Overview</string>
-    <string name="expenses_sub">Expenses Overview</string>
-    <string name="total_leave">Total</string>
-    <string name="casual_leave">Casual Leave</string>
-
-    <string name="unpaid_leave">Unpaid Leave</string>
-
-    <string name="sick_leave">Sick Leave</string>
-    <string name="paid_leave">Paid Leave</string>
-    <string name="other_leave">Other</string>
-    <string name="leave_request">Leave Request</string>
-    <string name="expenses_request">Expenses Request</string>
-    <string name="from">From</string>
-    <string name="duration">Duration</string>
-    <string name="attendance_sub">Attendance Overview</string>
-    <string name="please_correct_device_time">Please correct your device time.</string>
-    <string name="time_zone_does_match_message">The time zone of your phone does not match the correct time zone.</string>
-    <string name="selected_time_cannot_greater_message">Selected time cannot be greater than current time for today</string>
-    <string name="selected_time_cannot_be_future">Selected time cannot be in the future</string>
-    <string name="no_location_data_available">No location data available</string>
-    <string name="you_have_already_punched_in">You have already punched IN. Please punch OUT.</string>
-
-    <string name="background_location_permission_mess">
-    To mark your attendance smoothly and without interruption, location permission must be allowed at all times.\n\n
-    Please follow these steps:\n
-    1. Open Settings\n
-    2. Tap Permissions\n
-    3. Select Location\n
-    4. Choose Allow all the time\n\n
-    Thank you for your cooperation.
-</string>
-
-
-    <string name="you_have_already_punched_out">You have already punched OUT, or you have not punched IN yet. Please punch IN first.</string>
-    <string name="please_select_both_date_and_time">Please select both date and time.</string>
-    <string name="wait_message_with_minutes">Please wait %1$d minute(s) and %2$d second(s) before marking attendance again.</string>
-    <string name="wait_message_seconds_only">Please wait %1$d second(s) before marking attendance again.</string>
-    <string name="wait_message_attendance">Please wait %1$d more minute(s) to mark attendance again.</string>
-    <string name="your_GPS_is_not_turned_on_please_turn_it_on_to_mark_attendance">Your GPS is not turned on. Please turn it on to mark attendance.</string>
-    <string name="background_location_helps_track_attendance_accurately">Background location helps track attendance accurately</string>
-    <string name="your_internet_is_off">Your internet is off. Please turn on the internet to mark attendance.</string>
-    <string name="your_device_time_or_timezone_does_not_match_please_correct_it">Your device time or timezone does not match. Please correct it to mark attendance</string>
-    <string name="ams_app">AMS.app says</string>
-    <string name="faqfullForm">Frequently Asked Questions (FAQs)</string>
-    <string name="question_first">1. What is the AMS QR App used for?</string>
-    <string name="question_second">2. How do I mark my attendance using the app?</string>
-    <string name="question_third">3. Do I need to be at the company location to mark attendance?</string>
-    <string name="question_four">4. Why does the app need location (GPS) access?</string>
-    <string name="question_five">5. What should I do if the QR code is not scanning?</string>
-    <string name="answer_first">The AMS QR App is an attendance management system that allows employees to mark their attendance by scanning a QR code placed at the company\'s authorized location.</string>
-    <string name="answer_second">To mark your attendance:\n1. Open the AMS QR App.\n2. Tap on the "Scan QR" option.\n3. Scan the QR code available at your company\'s entrance or reception.\n4. If your location is verified, your attendance will be marked successfully.</string>
-    <string name="answer_third">Yes. You must be physically present at the company\'s authorized location. The app checks your GPS location and matches it with the company location before allowing attendance.</string>
-    <string name="answer_four">GPS is required to verify that you are within the company\'s geofenced area. Without location access, you won\'t be able to mark your attendance.</string>
-    <string name="answer_five">Make sure:\n1. Your camera is working properly.\n2. The QR code is not damaged or blurry.\n3. You are connected to the internet and location is turned ON.\n4. If the issue continues, contact your admin or HR department.</string>
-    <string name="contact">Contact Us</string>
-    <string name="chooseProfile">Choose Profile</string>
+    <string name="choose_language_message">Which language would you like to choose?</string>
+    <string name="english">English</string>
+    <string name="hindi">हिन्दी</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
+    <string name="choose_language">Choose language</string>
+    <string name="org_name">Shri Bhattarak Yash Kirti Digambar Jain</string>
+    <string name="trust_name">Dharmarth Trust Gurukul, Rishabhdeo</string>
+    <string name="select_template_theme">Select Template Theme</string>
+    <string name="select_font_style">Select Font Style</string>
+    <string name="select_video_template">Select Video Template</string>
     <string name="logout">Logout</string>
-    <string name="userName">UserName</string>
-    <string name="name">Name</string>
-    <string name="startdate">Start Date</string>
-    <string name="date">Date</string>
-    <string name="time">Time</string>
-    <string name="enter_time">Enter time</string>
-
-    <string name="enddate">End Date</string>
-    <string name="reason">Reason</string>
-    <string name="selectfile">Select File to Upload</string>
-    <string name="choosefile">Choose File</string>
-    <string name="label_password">Password</string>
-    <string name="lastName">Last Name</string>
-    <string name="phoneNo">Phone No</string>
-    <string name="home">Home</string>
-    <string name="leave">Leave</string>
-    <string name="remote">Remote</string>
-    <string name="available_leave">Available</string>
-    <string name="used_leave">Used</string>
-    <string name="leavetype">Leave Type</string>
-    <string name="locationMessage">Your Location is off\nPlease turn it on to mark attendance</string>
-    <string name="profile">Profile</string>
-    <string name="department">Department</string>
-    <string name="failed_to_fetch_punches">Failed to fetch punches.</string>
-    <string name="error_parsing_punches">Error parsing punches.</string>
-    <string name="no_data_company_api">No data received from company setting API.</string>
-    <string name="company_setting_not_found">Company setting not found.</string>
-    <string name="error_formatting_records">Error formatting records.</string>
-    <string name="no_record_found_for_selected_date">No record found for selected date.</string>
-    <string name="select_date_month_year">Select Date %1$s</string>
-    <string name="no_records_found">No records found.</string>
-    <string name="company_setting_processing_error">Something went wrong while processing company setting.</string>
-    <string name="unable_to_get_shift_timings">Unable to get your shift timings right now. Please try again later.</string>
-    <string name="shift_details_processing_error">Something went wrong while processing shift details.</string>
-    <string name="couldnt_fetch_data">Couldn\'t fetch data. Please check your internet connection.</string>
-    <string name="fetching_punches_for">Fetching punches for %1$s...</string>
-    <string name="login_successful">Login Successful</string>
-    <string name="logging_in">Logging in...</string>
-    <string name="login_failed">Login failed. Try again</string>
-    <string name="error_parsing_error_message">Error parsing error message</string>
-    <string name="user_not_found">User not found.</string>
-    <string name="attendence">Attendance</string>
-    <string name="expense">Expense</string>
-    <string name="login">Login</string>
-    <string name="next">Next</string>
-    <string name="pending">Pending</string>
-    <string name="rejected">Rejected</string>
-    <string name="approved">Approved</string>
-    <string name="skip">Skip</string>
-    <string name="sign_in">Sign in to your account</string>
-    <string name="signin">Sign In</string>
-    <string name="sign_up">Sign up</string>
-    <string name="submit">Submit</string>
-    <string name="status">Status</string>
-    <string name="working_hours">Total Hrs</string>
-    <string name="present">Present</string>
-    <string name="absent">Absent</string>
-    <string name="refresh">Re-fresh</string>
-    <string name="half_day">Half Day</string>
-    <string name="holiday">Holiday</string>
-    <string name="weak_off_present">Weak Off Present</string>
-    <string name="holiday_present">Holiday Present</string>
-    <string name="week_off">Weak Off</string>
-    <string name="error">Error</string>
-    <string name="you_cannot_select_a_future_month_or_year">You cannot select a future month or year.</string>
-    <string name="attendance_status">Attendance Status</string>
-    <string name="leave_status">Leave Status</string>
-    <string name="leave_balance">Leave Balance</string>
-    <string name="update">Update</string>
-
-    <string name="to_ams">To AMS</string>
-    <string name="to_compant_message">Powered by MaekoTech Solution</string>
-    <string name="term_and_condition">Terms &amp; conditions</string>
-    <string name="welcome">Welcome to AMS</string>
-    <string name="website_link">https://maekotech.com</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="background_location_permission_title">Background Location Permission</string>
-    <string name="enable_automatic_time_settings">Enable Automatic Time Settings</string>
-    <string name="fetching_attendance_data">Fetching Attendance data</string>
-    <string name="message_automatic_date_time">Automatic Date &amp; Time or Time Zone is OFF. Please enable them for accurate time validation.</string>
-    <string name="message_refresh">Do you want to refresh the settings?</string>
-    <string name="background_location_permission_granted">Background location permission granted</string>
-    <string name="background_location_permission_is_recommended_for_better_attendance_tracking">Background location permission is recommended for better attendance tracking</string>
-    <string name="background_location_permission_message">This app needs background location access to accurately track your attendance even when the app is closed or in the background. Please select "Allow all the time" in the next screen.</string>
-    <string name="location_permission_is_required_for_attendance_marking">Location permission is required for attendance marking.</string>
-    <string name="camera_permission_granted">Camera permission granted</string>
-    <string name="camera_permission_required">Camera Permission Required</string>
-    <string name="camera_permission_to_scan_qr">Camera access is needed to scan QR codes for attendance marking</string>
-    <string name="camera_permission_needed_for_attendance">Camera permission is needed to mark attendance</string>
-    <string name="camera_permission_required_for_scanning">Camera permission is required for QR code scanning</string>
-    <string name="camera_permission_settings_message">Please enable camera permission from app settings to scan QR codes</string>
-    <string name="camera_needed_for_qr_scanning">Camera access is needed for QR code scanning</string>
-    <string name="please_fill_all_required_field">Please fill all required fields</string>
-    <string name="please_enter_a_valid_email">Please enter a valid email</string>
-    <string name="no_changes_found">No changes found</string>
-    <string name="select_time">Select time</string>
-    <string name="profile_updated_successfully">Profile Updated Successfully</string>
-    <string name="update_failed_try_again">Update failed! Try again.</string>
-    <string name="session_expired">Session expired. Please login again.</string>
-    <string name="error_no_internet">No internet connection. Please check your network.</string>
-    <string name="error_cannot_connect">Cannot connect to server. Please check your internet connection.</string>
-    <string name="error_server_generic">Server error. Please try again later.</string>
-    <string name="error_server_with_code">Server error (%1$d). Please try again later.</string>
-    <string name="error_auth_failed">Authentication failed. Please login again.</string>
-    <string name="error_not_found">Resource not found.</string>
-    <string name="error_request_failed">Request failed (%1$d).</string>
-    <string name="error_timeout">Connection timed out. Please try again.</string>
-    <string name="error_network">Network error. Please check your connection.</string>
-    <string name="error_parse">Error processing server response.</string>
-    <string name="error_connection_failed">Connection failed. Please try again.</string>
-    <string name="logged_out_successfully">Logged out successfully</string>
-    <string name="error_clearing_data">Error clearing data</string>
-    <string name="clear_all_data_successfully">Clear All data successfully</string>
-    <string name="no_geoFencing_data_found">No GeoFencing data found</string>
-    <string name="failed_to_fetch_GeoFencing_data">Failed to fetch GeoFencing data</string>
-    <string name="geoFencing_API_call_failed">Unable to load location data. Please check your internet connection and try again.</string>
-    <string name="battery_optimization_title">Battery Optimization Required</string>
-    <string name="battery_optimization_steps">
-    To ensure accurate attendance tracking when your phone is locked or the app is closed, battery optimization must be disabled.\n\n
-    Steps to follow:\n
-    1. On the next screen, tap **Battery**\n
-    2. Select **Unrestricted** or **Don’t optimize**\n
-    3. Go back to the app\n\n
-    Without this setting, attendance tracking may stop automatically.
-</string>
-<string name="no_payslips_available">No payslips available</string>
-    <string name="error_parsing_data">There was a problem reading the data. Please try again.</string>
-    <string name="preparing_file_for_sharing">Preparing file for sharing...</string>
-    <string name="error_preparing_file">Error preparing file. Please try again.</string>
-    <string name="error_token_missing">Token is missing. Please log in again.</string>
-    <string name="starting_download">Starting download...</string>
-    <string name="download_started">Download Started</string>
-    <string name="download_manager_not_available">Download Manager not available</string>
-    <string name="fetching_your_payslips">Fetching your payslips...</string>
-    <string name="failed_to_fetch_payslips">Failed to fetch payslips</string>
-    <string name="downloading_pdf_file">Downloading PDF file...</string>
-    <string name="please_enter_company_code">Please enter company code</string>
-    <string name="Configuration_error_url_not_found">Configuration error: URL not found</string>
-    <string name="failed_to_connect_to_server">Failed to connect to server</string>
-    <string name="invalid_company_configuration">Invalid company configuration</string>
-    <string name="invalid_company_details">Invalid company details</string>
-    <string name="final_api_error">Something went wrong. Please try again.</string>
-
+    <string name="no_data_found">No Data Found !</string>
+    <string name="search_hint">Search by Name/ Date</string>
+    <string name="add_button_desc">Add button</string>
 </resources>

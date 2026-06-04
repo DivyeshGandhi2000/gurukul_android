@@ -1,90 +1,170 @@
 package com.gurukul.Fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.LocaleList;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.graphics.Insets;
+import androidx.core.os.LocaleListCompat;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
 import com.gurukul.R;
+import com.gurukul.Utils.Constants;
+import com.gurukul.Utils.Utils;
+import com.gurukul.activity.FontGroupLayout;
+import com.gurukul.activity.ImageTeamLayout;
+import com.gurukul.activity.VideoColorActivity;
+
+import java.util.Locale;
 
 public class SettingsFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
+        View selectTemplateTheme = view.findViewById(R.id.SelectTemplateThime);
+        View SelectFontFamily = view.findViewById(R.id.SelectFontFamily);
+        View SelectVideoTheme = view.findViewById(R.id.SelectVideoTheme);
+        View ChangelanguageBtn = view.findViewById(R.id.ChangelanguageBtn);
 
-        ViewCompat.setOnApplyWindowInsetsListener(view, (v, windowInsets) -> {
-            Insets systemBars = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return windowInsets;
+        selectTemplateTheme.setOnClickListener(v -> {
+            Intent intent = new Intent(requireContext(), ImageTeamLayout.class);
+            startActivity(intent);
         });
-
-        SharedPreferences prefs =
-                requireContext().getSharedPreferences("AppPrefs", Context.MODE_PRIVATE);
-        RadioGroup templateGroup = view.findViewById(R.id.templateGroup);
-
-
-        String currentTemplate = prefs.getString("template", "classic");
-        switch (currentTemplate) {
-            case "modern": templateGroup.check(R.id.radioModern); break;
-            case "gold":   templateGroup.check(R.id.radioGold);   break;
-            case "blue":   templateGroup.check(R.id.radioBlue);   break;
-            default:       templateGroup.check(R.id.radioClassic); break;
-        }
-
-        templateGroup.setOnCheckedChangeListener((g, checkedId) -> {
-            String choice = "classic";
-            if (checkedId == R.id.radioModern)  choice = "modern";
-            else if (checkedId == R.id.radioGold)   choice = "gold";
-            else if (checkedId == R.id.radioBlue)   choice = "blue";
-            prefs.edit().putString("template", choice).apply();
-            Toast.makeText(getContext(), "Template Updated", Toast.LENGTH_SHORT).show();
+        SelectFontFamily.setOnClickListener(v -> {
+            Intent intent = new Intent(requireContext(), FontGroupLayout.class);
+            startActivity(intent);
         });
-
-        RadioGroup fontGroup = view.findViewById(R.id.fontGroup);
-
-        String currentFont = prefs.getString("font_family", "default");
-        switch (currentFont) {
-            case "serif":      fontGroup.check(R.id.fontSerif);      break;
-            case "monospace":  fontGroup.check(R.id.fontMonospace);  break;
-            case "sans-serif": fontGroup.check(R.id.fontSansSerif);  break;
-            default:           fontGroup.check(R.id.fontDefault);    break;
-        }
-
-        fontGroup.setOnCheckedChangeListener((g, checkedId) -> {
-            String fontChoice = "default";
-            if (checkedId == R.id.fontSerif)           fontChoice = "serif";
-            else if (checkedId == R.id.fontMonospace)  fontChoice = "monospace";
-            else if (checkedId == R.id.fontSansSerif)  fontChoice = "sans-serif";
-            prefs.edit().putString("font_family", fontChoice).apply();
-            Toast.makeText(getContext(), "Font Updated", Toast.LENGTH_SHORT).show();
+        SelectVideoTheme.setOnClickListener(v -> {
+            Intent intent = new Intent(requireContext(), VideoColorActivity.class);
+            startActivity(intent);
         });
-        RadioGroup videoColorGroup = view.findViewById(R.id.videoColorGroup);
-
-        String currentVideoColor = prefs.getString("video_color", "blue");
-        switch (currentVideoColor) {
-            case "brown": videoColorGroup.check(R.id.radioVideoBrown); break;
-            case "blue":
-            default:      videoColorGroup.check(R.id.radioVideoBlue);  break;
-        }
-
-        videoColorGroup.setOnCheckedChangeListener((g, checkedId) -> {
-            String colorChoice = "blue";
-            if (checkedId == R.id.radioVideoBrown) colorChoice = "brown";
-            prefs.edit().putString("video_color", colorChoice).apply();
-            Toast.makeText(getContext(), "Video Color Updated", Toast.LENGTH_SHORT).show();
-        });
-
+        ChangelanguageBtn.setOnClickListener(v -> changeLanguage());
         return view;
 
     }
+    private void changeLanguage() {
+        LayoutInflater inflater = LayoutInflater.from(getActivity());
+        View dialogView = inflater.inflate(R.layout.dialog_change_language, null);
+
+        AlertDialog dialog = new AlertDialog.Builder(getActivity())
+                .setView(dialogView)
+                .setCancelable(true)
+                .create();
+
+        TextView titleTv = dialogView.findViewById(R.id.deliteTitleTv);
+        TextView buttonCancel = dialogView.findViewById(R.id.button_cancel);
+        TextView buttonOk = dialogView.findViewById(R.id.button_ok);
+        RadioGroup radioGroupLanguage = dialogView.findViewById(R.id.radioGroupLanguage);
+
+        titleTv.setText(getString(R.string.choose_language));
+        int selectedLang = Utils.getIntegerSharedPreferences(getActivity(), Constants.default_code);
+        radioGroupLanguage.check(selectedLang == 0 ? R.id.radioHindi : R.id.radioEnglish);
+
+        buttonOk.setOnClickListener(v -> {
+            FragmentActivity activity = getActivity();
+            if (activity == null) return;
+
+            int checkedId = radioGroupLanguage.getCheckedRadioButtonId();
+            String languageCode = (checkedId == R.id.radioHindi) ? "hi" : "en";
+            int langCode = (checkedId == R.id.radioHindi) ? 0 : 1;
+            Utils.setIntegerSharedPreference(activity, Constants.default_code, langCode);
+            Utils.setSharedPreference(activity, "LANG_CHANGED", "yes");
+            Utils.setSharedPreference(activity, Constants.langCode, languageCode);
+            Utils.setSharedPreferenceBoolean(activity, Constants.isLocaleSet, true);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                LocaleListCompat localeList = LocaleListCompat.forLanguageTags(languageCode);
+                AppCompatDelegate.setApplicationLocales(localeList);
+            } else {
+                setLocaleTraditional(languageCode);
+            }
+
+            dialog.dismiss();
+        });
+
+        buttonCancel.setOnClickListener(v -> dialog.dismiss());
+
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            View dialogRootView = dialog.getWindow().getDecorView();
+            int paddingInPixels = (int) (10 * getResources().getDisplayMetrics().density);
+
+            dialogRootView.setPadding(paddingInPixels, dialogRootView.getPaddingTop(),
+                    paddingInPixels, dialogRootView.getPaddingBottom());
+        }
+        dialog.show();
+    }
+
+    private void setLocaleTraditional(String languageCode) {
+        FragmentActivity activity = getActivity();
+        if (activity == null) return;
+
+        try {
+            Locale locale = new Locale(languageCode);
+            Locale.setDefault(locale);
+
+            Resources resources = activity.getResources();
+            Configuration config = new Configuration(resources.getConfiguration());
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                config.setLocale(locale);
+                config.setLocales(new LocaleList(locale));
+            } else {
+
+                config.locale = locale;
+            }
+
+
+            resources.updateConfiguration(config, resources.getDisplayMetrics());
+
+            try {
+                Resources appResources = activity.getApplicationContext().getResources();
+                Configuration appConfig = new Configuration(appResources.getConfiguration());
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    appConfig.setLocale(locale);
+                    appConfig.setLocales(new LocaleList(locale));
+                } else {
+                    appConfig.locale = locale;
+                }
+
+                appResources.updateConfiguration(appConfig, appResources.getDisplayMetrics());
+            } catch (Exception e) {
+                Log.w("ProfileFragment", "Could not update app context resources: " + e.getMessage());
+            }
+
+            Log.d("ProfileFragment", "Locale updated traditionally to: " + languageCode);
+            if (!activity.isFinishing() && !activity.isDestroyed()) {
+                activity.runOnUiThread(() -> {
+                    try {
+                        activity.recreate();
+                    } catch (Exception e) {
+                        Log.e("ProfileFragment", "Error recreating activity: " + e.getMessage());
+                    }
+                });
+            }
+
+        } catch (Exception e) {
+            Log.e("ProfileFragment", "Error setting traditional locale: " + e.getMessage());
+        }
+    }
+
 }

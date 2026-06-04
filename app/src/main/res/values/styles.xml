@@ -58,4 +58,36 @@
         <item name="backgroundTint">@color/primary</item>
         <item name="tint">@color/white</item>
     </style>
+    <style name="dialog_card" parent="@style/Theme.MaterialComponents.Dialog">
+        <item name="cardCornerRadius">24dp</item>
+    </style>
+    <style name="dialog_margins">
+        <item name="android:layout_marginTop">16dp</item>
+        <item name="android:layout_marginBottom">16dp</item>
+    </style>
+    <style name="ProfileLebelText">
+        <item name="android:textColor">@color/primary</item>
+        <item name="android:textSize">@dimen/text_size_16</item>
+    </style>
+    <style name="ShapeAppearanceOverlayAll.CardView" parent="">
+        <item name="cornerFamilyBottomLeft">rounded</item>
+        <item name="cornerFamilyBottomRight">rounded</item>
+        <item name="cornerFamilyTopLeft">rounded</item>
+        <item name="cornerFamilyTopRight">rounded</item>
+        <item name="cornerSizeTopLeft">20dp</item>
+        <item name="cornerSizeTopRight">20dp</item>
+        <item name="cornerSizeBottomLeft">20dp</item>
+        <item name="cornerSizeBottomRight">20dp</item>
+    </style>
+    <style name="dialog_title">
+        <item name="android:textSize">@dimen/text_size_16</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/primary</item>
+    </style>
+    <style name="NoDataImageView">
+        <item name="android:layout_width">200dp</item>
+        <item name="android:layout_height">200dp</item>
+        <item name="android:layout_marginTop">20dp</item>
+        <item name="android:src">@drawable/no_data</item>
+    </style>
 </resources>

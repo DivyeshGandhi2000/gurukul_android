@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F5F5">
+    android:background="@color/white">
+
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/searchBarCard"
         android:layout_width="match_parent"
@@ -38,7 +39,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@null"
-                android:hint="Search by Name/ Date"
+                android:hint="@string/search_hint"
                 android:imeOptions="actionSearch"
                 android:includeFontPadding="false"
                 android:inputType="textPersonName"
@@ -46,9 +47,37 @@
                 android:textColor="@color/primary"
                 android:textColorHint="@color/primary"
                 android:textSize="14sp" />
-
-          </LinearLayout>
+        </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/searchBarCard"
+        android:layout_marginTop="12dp"
+        android:clipToPadding="false" />
+
+    <LinearLayout
+        android:id="@+id/nodata_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="80dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ImageView
+            style="@style/NoDataImageView"
+            android:layout_marginTop="60dp" />
+
+        <TextView
+            style="@style/dialog_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/no_data_found" />
+    </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btnAdd"
@@ -60,17 +89,8 @@
         android:layout_gravity="bottom|end"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-        android:contentDescription="Add button"
+        android:contentDescription="@string/add_button_desc"
         android:src="@drawable/baseline_add_24"
         app:backgroundTint="@color/primary" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/searchBarCard"
-        android:layout_marginTop="0dp"
-        android:clipToPadding="false" />
-
 
 </RelativeLayout>

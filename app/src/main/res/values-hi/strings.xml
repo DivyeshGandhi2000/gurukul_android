@@ -1,0 +1,62 @@
+<resources>
+    <string name="app_name">गुरुकुल</string>
+    <string name="attendenceMarkAt">अंतिम दर्ज समय:</string>
+    <string name="already_member">क्या आप पहले से सदस्य हैं?</string>
+    <string name="address">पता</string>
+
+    <string name="title_select_template">प्रिंट टेम्पलेट चुनें</string>
+
+    <string name="template_classic_name">क्लासिक थीम</string>
+    <string name="template_classic_desc">लाल और क्रीम शैली</string>
+
+    <string name="template_modern_name">आधुनिक थीम</string>
+    <string name="template_modern_desc">गहरा नीला और सफेद</string>
+
+    <string name="template_gold_name">प्रीमियम थीम</string>
+    <string name="template_gold_desc">गहरा धूसर और सुनहरा</string>
+
+    <string name="template_cyan_name">आधुनिक सियान</string>
+    <string name="template_cyan_desc">नीली और सफेद शैली</string>
+
+    <string name="title_select_font">फ़ॉन्ट शैली चुनें</string>
+
+    <string name="font_default_name">सिस्टम डिफ़ॉल्ट</string>
+    <string name="font_default_desc">डिवाइस का मानक फ़ॉन्ट</string>
+
+    <string name="font_serif_name">सेरिफ़</string>
+    <string name="font_serif_desc">आकर्षक और पारंपरिक टाइपोग्राफी</string>
+
+    <string name="font_mono_name">मोनोस्पेस</string>
+    <string name="font_mono_desc">टाइपराइटर शैली निश्चित चौड़ाई</string>
+
+    <string name="font_sans_name">सैन्स-सेरिफ़</string>
+    <string name="font_sans_desc">स्वच्छ और आधुनिक टाइपोग्राफी</string>
+
+    <string name="title_select_video_color">वीडियो रंग चुनें</string>
+
+    <string name="video_color_blue_name">नीली थीम</string>
+    <string name="video_color_blue_desc">शांत और मानक वीडियो शैली</string>
+
+    <string name="video_color_brown_name">भूरी थीम</string>
+    <string name="video_color_brown_desc">गर्म और सिनेमाई वीडियो शैली</string>
+
+    <string name="change_language">भाषा बदलें</string>
+    <string name="choose_language_message">आप कौन सी भाषा चुनना चाहते हैं?</string>
+
+    <string name="english">अंग्रेज़ी</string>
+    <string name="hindi">हिन्दी</string>
+
+    <string name="cancel">रद्द करें</string>
+    <string name="ok">ठीक है</string>
+
+    <string name="choose_language">भाषा चुनें</string>
+    <string name="org_name">श्री भट्टारक यशकीर्ति दिगम्बर जैन</string>
+    <string name="trust_name">धर्मार्थ ट्रस्ट गुरुकुल, ऋषभदेव</string>
+    <string name="select_template_theme">टेम्पलेट थीम चुनें</string>
+    <string name="select_font_style">फ़ॉन्ट शैली चुनें</string>
+    <string name="select_video_template">वीडियो टेम्पलेट चुनें</string>
+    <string name="no_data_found">कोई डेटा नहीं मिला !</string>
+    <string name="logout">लॉग आउट</string>
+    <string name="search_hint">नाम / दिनांक द्वारा खोजें</string>
+    <string name="add_button_desc">जोड़ें बटन</string>
+</resources>

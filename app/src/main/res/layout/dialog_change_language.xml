@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
+    style="@style/dialog_card">
+
+    <LinearLayout
+        style="@style/dialog_margins"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+        <TextView
+
+            android:id="@+id/deliteTitleTv"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:textColor="@color/primary"
+            android:textSize="18sp"
+            android:text="@string/change_language"
+            android:layout_marginHorizontal="24dp"
+            android:textStyle="bold"
+            android:layout_marginVertical="5dp" />
+        <TextView
+            android:id="@+id/delete_message"
+            android:layout_width="match_parent"
+
+            android:layout_height="wrap_content"
+            android:text="@string/choose_language_message"
+            android:textSize="14sp"
+
+            android:textColor="@color/lightgray"
+            android:layout_marginHorizontal="24dp" />
+
+        <RadioGroup
+            android:id="@+id/radioGroupLanguage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginHorizontal="24dp"
+            >
+
+
+
+            <RadioButton
+                android:id="@+id/radioEnglish"
+                android:layout_width="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_height="wrap_content"
+                android:text="@string/english"
+                android:textColor="@color/lightgray"
+                android:textSize="16sp"
+                style="@style/CustomRadioButton"
+                android:checked="true" />
+
+            <RadioButton
+                android:id="@+id/radioHindi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="@string/hindi"
+                android:textColor="@color/lightgray"
+                android:textSize="16sp"
+                style="@style/CustomRadioButton" />
+        </RadioGroup>
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="end"
+            android:layout_marginHorizontal="24dp">
+
+            <TextView
+                android:id="@+id/button_cancel"
+                android:paddingHorizontal="15dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="15dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/cancel"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                android:textColor="@color/primary"
+                android:textSize="@dimen/text_size_14" />
+
+            <TextView
+                android:id="@+id/button_ok"
+                android:paddingHorizontal="15dp"
+                android:paddingBottom="15dp"
+                android:paddingTop="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ok"
+
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                android:textColor="@color/primary"
+                android:textSize="@dimen/text_size_14" />
+        </LinearLayout>
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

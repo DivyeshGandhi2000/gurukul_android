@@ -40,6 +40,12 @@
         <activity android:name=".AddStatusActivity"
             android:screenOrientation="portrait"/>
 
+        <activity android:name=".activity.ImageTeamLayout"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.FontGroupLayout"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.VideoColorActivity"
+            android:screenOrientation="portrait"/>
         <service
             android:name=".AutoDeleteService"
             android:enabled="true"
