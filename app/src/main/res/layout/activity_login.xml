@@ -10,8 +10,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="श्री भट्टारक यश कीर्ति दिगम्बर जैन धर्मार्थ ट्रस्ट गुरुकुल ऋषभदेव
-जिला-उदयपुर (राजस्थान) पिन कोड : 313802"
+        android:text="@string/app_title"
         android:textSize="18sp"
 
         android:textAlignment="center"
@@ -25,7 +24,7 @@
         android:layout_marginTop="25dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Username"
+        android:hint="@string/username"
         app:passwordToggleTint="@color/primary">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -41,7 +40,7 @@
         android:layout_marginTop="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Password"
+        android:hint="@string/password"
         app:passwordToggleEnabled="true"
         app:passwordToggleTint="@color/primary">
 

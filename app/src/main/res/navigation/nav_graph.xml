@@ -8,7 +8,14 @@
         android:id="@+id/navigation_home"
         android:name="com.gurukul.Fragments.HomeFragment"
         android:label="Home" />
-
+    <fragment
+        android:id="@+id/navigation_gallery"
+        android:name="com.gurukul.Fragments.GalleryFragment"
+        android:label="Gallery" />
+    <fragment
+        android:id="@+id/navigation_donate"
+        android:name="com.gurukul.Fragments.DonationFragment"
+        android:label="Donate" />
     <fragment
         android:id="@+id/navigation_settings"
         android:name="com.gurukul.Fragments.SettingsFragment"

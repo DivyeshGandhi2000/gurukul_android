@@ -12,5 +12,13 @@
     <color name="sakal_inactive_light">#9CA3AF</color>
     <color name="divider_color">#F3F4F6</color>
     <color name="color_danger">#DC2626</color>
+    <color name="color_brown">#8B0000</color>
+    <color name="color_green">#00363A</color>
+    <color name="color_orange">#F74B02</color>
+    <color name="color_yellow">#D6762A</color>
+    <color name="color_blue">#E08C2D</color>
+    <color name="color_lite_orange">#1AE93D18</color>
+    <color name="color_orange_secondryText">#161616</color>
+    <color name="color_lite_green">#1A00363A</color>
     <color name="color_danger_surface">#FEF2F2</color>
 </resources>

@@ -6,10 +6,15 @@ import android.content.SharedPreferences;
 import android.graphics.Insets;
 import android.os.Build;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
+
+import com.gurukul.R;
 
 public class Utils {
     public static Context appContext;
@@ -71,5 +76,34 @@ public class Utils {
             insetsController.setAppearanceLightStatusBars(false);
         }
     }
+    public static void showEmptyState(View emptyStateLayout, View mainContent, int iconRes, String title, String message, boolean showRetry, View.OnClickListener retryListener) {
+        if (emptyStateLayout == null) return;
 
+
+        if (mainContent != null) mainContent.setVisibility(View.GONE);
+        emptyStateLayout.setVisibility(View.VISIBLE);
+
+        ImageView ivIcon = emptyStateLayout.findViewById(R.id.ivEmptyStateIcon);
+        TextView tvTitle = emptyStateLayout.findViewById(R.id.tvEmptyStateTitle);
+        TextView tvMessage = emptyStateLayout.findViewById(R.id.tvEmptyStateMessage);
+        Button btnRetry = emptyStateLayout.findViewById(R.id.btnEmptyStateRetry);
+
+        if (ivIcon != null && iconRes != 0) ivIcon.setImageResource(iconRes);
+        if (tvTitle != null) tvTitle.setText(title);
+        if (tvMessage != null) tvMessage.setText(message);
+
+        if (btnRetry != null) {
+            if (showRetry) {
+                btnRetry.setVisibility(View.VISIBLE);
+                btnRetry.setOnClickListener(retryListener);
+            } else {
+                btnRetry.setVisibility(View.GONE);
+            }
+        }
+    }
+
+    public static void hideEmptyState(View emptyStateLayout, View mainContent) {
+        if (emptyStateLayout != null) emptyStateLayout.setVisibility(View.GONE);
+        if (mainContent != null) mainContent.setVisibility(View.VISIBLE);
+    }
 }

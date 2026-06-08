@@ -15,7 +15,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="शान्ति धारा"
+            android:text="@string/shanti_dhara"
             android:textColor="#8B0000"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -27,13 +27,13 @@
             android:scaleType="centerCrop"
             android:background="#E0E0E0"
             android:layout_marginBottom="16dp"
-            android:contentDescription="Image Preview" />
+            android:contentDescription="@string/image_preview" />
 
         <Button
             android:id="@+id/btnSelectImage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Select Image"
+            android:text="@string/select_image"
             android:backgroundTint="#9b1c1e"
             />
 
@@ -43,7 +43,7 @@
             android:layout_marginTop="25dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Name"
+            android:hint="@string/name"
             app:passwordToggleTint="@color/primary">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -63,7 +63,7 @@
             android:overScrollMode="always"
             android:scrollbarStyle="insideOverlay"
             android:layout_height="wrap_content"
-            android:hint="Description"
+            android:hint="@string/description"
 
             >
 
@@ -86,7 +86,7 @@
             android:layout_width="match_parent"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:hint="Select Date"
+            android:hint="@string/select_date"
             app:passwordToggleTint="@color/primary">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -106,7 +106,7 @@
             android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Select">
+            android:hint="@string/select">
 
             <com.google.android.material.textfield.MaterialAutoCompleteTextView
                 style="@style/StyledDropdownEditText"
@@ -131,7 +131,7 @@
                 android:layout_width="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_height="wrap_content"
-                android:text="Hide"
+                android:text="@string/hide"
                 android:textSize="16sp"
                 style="@style/CustomRadioButton"
                 android:checked="true" />
@@ -141,7 +141,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:text="Visible"
+                android:text="@string/visible"
                 android:textSize="16sp"
                 style="@style/CustomRadioButton" />
         </RadioGroup>
@@ -153,7 +153,7 @@
             android:paddingVertical="16dp"
             android:gravity="center"
             android:background="@drawable/gradient_btn"
-            android:text="Save Status"
+            android:text="@string/save_status"
             android:textColor="@color/white"
             android:layout_marginTop="20dp"
             app:layout_constraintBottom_toBottomOf="parent"

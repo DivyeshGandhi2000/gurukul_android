@@ -26,6 +26,7 @@ import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.gurukul.Utils.VideoGenerator;
+import com.gurukul.Utils.VideoGenerator2;
 import com.gurukul.Utils.VideoGeneratorNew;
 
 import java.io.File;
@@ -88,7 +89,13 @@ public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.ViewHolder
             View xmlView;
             if (theme.equals("blue")) {
                 xmlView = LayoutInflater.from(context).inflate(R.layout.item_statusnew_xml, null);
-            } else {
+            } else if (theme.equals("green")){
+                xmlView = LayoutInflater.from(context).inflate(R.layout.item_status_green, null);
+            }else if (theme.equals("orange")){
+                xmlView = LayoutInflater.from(context).inflate(R.layout.item_status_orange, null);
+            }else if (theme.equals("yellow")){
+                xmlView = LayoutInflater.from(context).inflate(R.layout.item_status_yellow, null);
+            }else {
                 xmlView = LayoutInflater.from(context).inflate(R.layout.item_status_xml, null);
             }
 
@@ -201,7 +208,7 @@ public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.ViewHolder
 
             if ("brown".equals(videoColor)) {
                 // Must strictly use VideoGeneratorNew's callback
-                VideoGeneratorNew.createAnimatedVideo(context, status, new VideoGeneratorNew.VideoGenerationCallback() {
+                VideoGenerator2.createAnimatedVideo(context, status, new VideoGenerator2.VideoGenerationCallback() {
                     @Override
                     public void onProgress(int percentage) {
                         ((Activity) context).runOnUiThread(() -> {
@@ -487,6 +494,33 @@ public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.ViewHolder
 
         // Blue uses item_statusnew_xml which already has correct colors — skip overrides
         if (theme.equals("blue")) {
+            if (watermark != null) {
+                watermark.setImageResource(R.drawable.img);
+                watermark.setVisibility(View.VISIBLE);
+                watermark.setAlpha(0);
+//                frameLayout.setImageResource(R.drawable.back);
+//                watermark.setAlpha(0.80);
+
+            }
+        } else if (theme.equals("green")) {
+            if (watermark != null) {
+                watermark.setImageResource(R.drawable.img);
+                watermark.setVisibility(View.VISIBLE);
+                watermark.setAlpha(0);
+//                frameLayout.setImageResource(R.drawable.back);
+//                watermark.setAlpha(0.80);
+
+            }
+        } else if (theme.equals("orange")) {
+            if (watermark != null) {
+                watermark.setImageResource(R.drawable.img);
+                watermark.setVisibility(View.VISIBLE);
+                watermark.setAlpha(0);
+//                frameLayout.setImageResource(R.drawable.back);
+//                watermark.setAlpha(0.80);
+
+            }
+        } else if (theme.equals("yellow")) {
             if (watermark != null) {
                 watermark.setImageResource(R.drawable.img);
                 watermark.setVisibility(View.VISIBLE);

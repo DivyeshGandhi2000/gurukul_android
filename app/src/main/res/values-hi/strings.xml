@@ -48,7 +48,16 @@
 
     <string name="cancel">रद्द करें</string>
     <string name="ok">ठीक है</string>
-
+    <string name="donate">दान</string>
+    <string name="something_went_wrong">कुछ गलत हो गया</string>
+    <string name="no_donations_found">कोई दान नहीं मिला</string>
+    <string name="no_donations_message">वर्तमान में प्रदर्शित करने के लिए कोई दान उपलब्ध नहीं है।</string>
+    <string name="data_error">डेटा त्रुटि</string>
+    <string name="failed_to_read_data">सर्वर से डेटा पढ़ने में विफल।</string>
+    <string name="no_internet_connection">इंटरनेट कनेक्शन नहीं है</string>
+    <string name="check_network_settings">कृपया अपनी नेटवर्क सेटिंग्स जांचें और पुनः प्रयास करें।</string>
+    <string name="server_error">सर्वर त्रुटि</string>
+    <string name="unable_to_connect_server">सर्वर से कनेक्ट करने में असमर्थ।</string>
     <string name="choose_language">भाषा चुनें</string>
     <string name="org_name">श्री भट्टारक यशकीर्ति दिगम्बर जैन</string>
     <string name="trust_name">धर्मार्थ ट्रस्ट गुरुकुल, ऋषभदेव</string>
@@ -59,4 +68,27 @@
     <string name="logout">लॉग आउट</string>
     <string name="search_hint">नाम / दिनांक द्वारा खोजें</string>
     <string name="add_button_desc">जोड़ें बटन</string>
+    <string name="home">होम</string>
+    <string name="settings">सेटिंग्स</string>
+    <string name="app_title">श्री भट्टारक यश कीर्ति दिगम्बर जैन धर्मार्थ ट्रस्ट गुरुकुल ऋषभदेव\nजिला-उदयपुर (राजस्थान) पिन कोड : 313802</string>
+    <string name="username">यूज़रनेम</string>
+    <string name="gallery">गैलरी</string>
+    <string name="password">पासवर्ड</string>
+    <string name="login">लॉगिन</string>
+    <string name="shanti_dhara">शान्ति धारा</string>
+    <string name="image_preview">छवि पूर्वावलोकन</string>
+    <string name="select_image">छवि चुनें</string>
+    <string name="name">नाम</string>
+    <string name="description">विवरण</string>
+    <string name="select_date">तिथि चुनें</string>
+    <string name="select">चुनें</string>
+    <string name="hide">छुपाएँ</string>
+    <string name="visible">दिखाएँ</string>
+    <string name="save_status">स्थिति सहेजें</string>
+    <string name="template_green_name">हरा थीम</string>
+    <string name="template_green_desc">एक ताज़ा और आकर्षक हरे रंग का डिज़ाइन</string>
+    <string name="template_orange_name">नारंगी थीम</string>
+    <string name="template_orange_desc">गर्म और आकर्षक रंगों का डिज़ाइन</string>
+    <string name="template_yellow_name">पीली थीम</string>
+    <string name="template_yellow_desc">उज्ज्वल और आकर्षक डिज़ाइन</string>
 </resources>
