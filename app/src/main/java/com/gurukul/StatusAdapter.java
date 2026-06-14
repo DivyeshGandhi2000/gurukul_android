@@ -25,7 +25,9 @@ import androidx.annotation.NonNull;
 import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.gurukul.Utils.ThemeApplier;
 import com.gurukul.Utils.VideoGenerator;
+import com.gurukul.Utils.VideoGenerator1;
 import com.gurukul.Utils.VideoGenerator2;
 import com.gurukul.Utils.VideoGeneratorNew;
 
@@ -82,31 +84,20 @@ public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.ViewHolder
         }
 
         holder.btnShare.setOnClickListener(v -> {
-            android.content.SharedPreferences prefs =
-                    context.getSharedPreferences("AppPrefs", Context.MODE_PRIVATE);
-            String theme = prefs.getString("template", "classic");
+            SharedPreferences prefs = context.getSharedPreferences("AppPrefs", Context.MODE_PRIVATE);
+            String themeKey = prefs.getString("template", "classic");
 
-            View xmlView;
-            if (theme.equals("blue")) {
-                xmlView = LayoutInflater.from(context).inflate(R.layout.item_statusnew_xml, null);
-            } else if (theme.equals("green")){
-                xmlView = LayoutInflater.from(context).inflate(R.layout.item_status_green, null);
-            }else if (theme.equals("orange")){
-                xmlView = LayoutInflater.from(context).inflate(R.layout.item_status_orange, null);
-            }else if (theme.equals("yellow")){
-                xmlView = LayoutInflater.from(context).inflate(R.layout.item_status_yellow, null);
-            }else {
-                xmlView = LayoutInflater.from(context).inflate(R.layout.item_status_xml, null);
-            }
+            com.gurukul.model.ThemeConfig theme = com.gurukul.db.ThemeDatabaseHelper.getInstance(context).getTheme(themeKey);
+            int layoutRes = ThemeApplier.getLayoutResId(context, themeKey);
+            View xmlView = LayoutInflater.from(context).inflate(layoutRes, null);
 
-            populateXmlView(xmlView, status);
+            populateXmlView(xmlView, status, theme);
+
             Bitmap bitmap = convertViewToBitmap(xmlView);
-            if (bitmap != null) {
-                shareImageBitmap(bitmap, status);
-            } else {
-                Toast.makeText(context, "Failed to create image", Toast.LENGTH_SHORT).show();
-            }
+            if (bitmap != null) shareImageBitmap(bitmap, status);
+            else Toast.makeText(context, "Failed to create image", Toast.LENGTH_SHORT).show();
         });
+
 
         holder.btnEdit.setOnClickListener(v -> {
             Intent intent = new Intent(v.getContext(), AddStatusActivity.class);
@@ -206,73 +197,143 @@ public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.ViewHolder
             SharedPreferences prefs = context.getSharedPreferences("AppPrefs", Context.MODE_PRIVATE);
             String videoColor = prefs.getString("video_color", "blue");
 
-            if ("brown".equals(videoColor)) {
-                // Must strictly use VideoGeneratorNew's callback
-                VideoGenerator2.createAnimatedVideo(context, status, new VideoGenerator2.VideoGenerationCallback() {
-                    @Override
-                    public void onProgress(int percentage) {
-                        ((Activity) context).runOnUiThread(() -> {
-                            progressDialog.setProgress(percentage);
-                            progressDialog.setMessage("Rendering frame " + percentage + "%");
-                        });
-                    }
+            switch (videoColor) {
+                case "brown":
+                    VideoGenerator2.createAnimatedVideo(context, status, new VideoGenerator2.VideoGenerationCallback() {
+                        @Override
+                        public void onProgress(int percentage) {
+                            ((Activity) context).runOnUiThread(() -> {
+                                progressDialog.setProgress(percentage);
+                                progressDialog.setMessage("Rendering frame " + percentage + "%");
+                            });
+                        }
 
-                    @Override
-                    public void onFinished(File videoFile) {
-                        ((Activity) context).runOnUiThread(() -> {
-                            progressDialog.dismiss();
-                            lastSavedVideoUri = saveVideoToDownloadsAndGetUri(context, videoFile);
-                            if (lastSavedVideoUri != null) {
-                                Toast.makeText(context, "Video saved to gallery successfully!", Toast.LENGTH_LONG).show();
-                            } else {
-                                Toast.makeText(context, "Failed to save video.", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    }
+                        @Override
+                        public void onFinished(File videoFile) {
+                            ((Activity) context).runOnUiThread(() -> {
+                                progressDialog.dismiss();
+                                lastSavedVideoUri = saveVideoToDownloadsAndGetUri(context, videoFile);
+                                if (lastSavedVideoUri != null) {
+                                    Toast.makeText(context, "Video saved to gallery successfully!", Toast.LENGTH_LONG).show();
+                                } else {
+                                    Toast.makeText(context, "Failed to save video.", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
 
-                    @Override
-                    public void onError(Exception e) {
-                        ((Activity) context).runOnUiThread(() -> {
-                            progressDialog.dismiss();
-                            Log.e("VideoGen", "Failed", e);
-                            Toast.makeText(context, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                        });
-                    }
-                });
+                        @Override
+                        public void onError(Exception e) {
+                            ((Activity) context).runOnUiThread(() -> {
+                                progressDialog.dismiss();
+                                Log.e("VideoGen", "Failed", e);
+                                Toast.makeText(context, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                            });
+                        }
+                    });
+                    break;
 
-            } else {
-                // Must strictly use VideoGenerator's callback
-                VideoGenerator.createAnimatedVideo(context, status, new VideoGenerator.VideoGenerationCallback() {
-                    @Override
-                    public void onProgress(int percentage) {
-                        ((Activity) context).runOnUiThread(() -> {
-                            progressDialog.setProgress(percentage);
-                            progressDialog.setMessage("Rendering frame " + percentage + "%");
-                        });
-                    }
+                case "red":
+                    VideoGenerator1.createAnimatedVideo(context, status, new VideoGenerator1.VideoGenerationCallback() {
+                        @Override
+                        public void onProgress(int percentage) {
+                            ((Activity) context).runOnUiThread(() -> {
+                                progressDialog.setProgress(percentage);
+                                progressDialog.setMessage("Rendering frame " + percentage + "%");
+                            });
+                        }
 
-                    @Override
-                    public void onFinished(File videoFile) {
-                        ((Activity) context).runOnUiThread(() -> {
-                            progressDialog.dismiss();
-                            lastSavedVideoUri = saveVideoToDownloadsAndGetUri(context, videoFile);
-                            if (lastSavedVideoUri != null) {
-                                Toast.makeText(context, "Video saved to gallery successfully!", Toast.LENGTH_LONG).show();
-                            } else {
-                                Toast.makeText(context, "Failed to save video.", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    }
+                        @Override
+                        public void onFinished(File videoFile) {
+                            ((Activity) context).runOnUiThread(() -> {
+                                progressDialog.dismiss();
+                                lastSavedVideoUri = saveVideoToDownloadsAndGetUri(context, videoFile);
+                                if (lastSavedVideoUri != null) {
+                                    Toast.makeText(context, "Video saved to gallery successfully!", Toast.LENGTH_LONG).show();
+                                } else {
+                                    Toast.makeText(context, "Failed to save video.", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
 
-                    @Override
-                    public void onError(Exception e) {
-                        ((Activity) context).runOnUiThread(() -> {
-                            progressDialog.dismiss();
-                            Log.e("VideoGen", "Failed", e);
-                            Toast.makeText(context, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                        });
-                    }
-                });
+                        @Override
+                        public void onError(Exception e) {
+                            ((Activity) context).runOnUiThread(() -> {
+                                progressDialog.dismiss();
+                                Log.e("VideoGen", "Failed", e);
+                                Toast.makeText(context, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                            });
+                        }
+                    });
+                    break;
+
+                case "green":
+                    VideoGeneratorNew.createAnimatedVideo(context, status, new VideoGeneratorNew.VideoGenerationCallback() {
+                        @Override
+                        public void onProgress(int percentage) {
+                            ((Activity) context).runOnUiThread(() -> {
+                                progressDialog.setProgress(percentage);
+                                progressDialog.setMessage("Rendering frame " + percentage + "%");
+                            });
+                        }
+
+                        @Override
+                        public void onFinished(File videoFile) {
+                            ((Activity) context).runOnUiThread(() -> {
+                                progressDialog.dismiss();
+                                lastSavedVideoUri = saveVideoToDownloadsAndGetUri(context, videoFile);
+                                if (lastSavedVideoUri != null) {
+                                    Toast.makeText(context, "Video saved to gallery successfully!", Toast.LENGTH_LONG).show();
+                                } else {
+                                    Toast.makeText(context, "Failed to save video.", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void onError(Exception e) {
+                            ((Activity) context).runOnUiThread(() -> {
+                                progressDialog.dismiss();
+                                Log.e("VideoGen", "Failed", e);
+                                Toast.makeText(context, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                            });
+                        }
+                    });
+                    break;
+
+                case "blue":
+                default:
+                    VideoGenerator.createAnimatedVideo(context, status, new VideoGenerator.VideoGenerationCallback() {
+                        @Override
+                        public void onProgress(int percentage) {
+                            ((Activity) context).runOnUiThread(() -> {
+                                progressDialog.setProgress(percentage);
+                                progressDialog.setMessage("Rendering frame " + percentage + "%");
+                            });
+                        }
+
+                        @Override
+                        public void onFinished(File videoFile) {
+                            ((Activity) context).runOnUiThread(() -> {
+                                progressDialog.dismiss();
+                                lastSavedVideoUri = saveVideoToDownloadsAndGetUri(context, videoFile);
+                                if (lastSavedVideoUri != null) {
+                                    Toast.makeText(context, "Video saved to gallery successfully!", Toast.LENGTH_LONG).show();
+                                } else {
+                                    Toast.makeText(context, "Failed to save video.", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void onError(Exception e) {
+                            ((Activity) context).runOnUiThread(() -> {
+                                progressDialog.dismiss();
+                                Log.e("VideoGen", "Failed", e);
+                                Toast.makeText(context, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                            });
+                        }
+                    });
+                    break;
             }
         });
         holder.btnDelete.setOnClickListener(v -> {
@@ -474,115 +535,26 @@ public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.ViewHolder
         return statusList.size();
     }
 
-    private void populateXmlView(View view, Status status) {
-        ScrollView rootScroll = view.findViewById(R.id.rootScroll);
-        LinearLayout headerCard = view.findViewById(R.id.headerCard);
-        LinearLayout dateBar = view.findViewById(R.id.dateBar);
-        LinearLayout footerCard = view.findViewById(R.id.footerCard);
-        LinearLayout isVisibleName = view.findViewById(R.id.isVisibleName);
-        TextView tvName = view.findViewById(R.id.name);
-        TextView tvType = view.findViewById(R.id.type);
-        TextView tvDesc = view.findViewById(R.id.discription);
-        TextView tvDate = view.findViewById(R.id.date);
+    private void populateXmlView(View view, Status status, com.gurukul.model.ThemeConfig theme) {
+        // 1. Apply theme colors/drawables (single call — no if/else chain)
+       ThemeApplier.applyToStatusView(context, view, theme);
+
+        TextView tvName        = view.findViewById(R.id.name);
         TextView tvDescription = view.findViewById(R.id.discription);
-        ImageView ivImage = view.findViewById(R.id.image);
-        ImageView watermark = view.findViewById(R.id.background_watermark);
-        FrameLayout frameLayout = view.findViewById(R.id.mainFrame);
-        android.content.SharedPreferences prefs =
-                context.getSharedPreferences("AppPrefs", Context.MODE_PRIVATE);
-        String theme = prefs.getString("template", "classic");
+        TextView tvDate        = view.findViewById(R.id.date);
+        TextView tvType        = view.findViewById(R.id.type);
+        ImageView ivImage      = view.findViewById(R.id.image);
+        LinearLayout isVisibleName = view.findViewById(R.id.isVisibleName);
 
-        // Blue uses item_statusnew_xml which already has correct colors — skip overrides
-        if (theme.equals("blue")) {
-            if (watermark != null) {
-                watermark.setImageResource(R.drawable.img);
-                watermark.setVisibility(View.VISIBLE);
-                watermark.setAlpha(0);
-//                frameLayout.setImageResource(R.drawable.back);
-//                watermark.setAlpha(0.80);
-
-            }
-        } else if (theme.equals("green")) {
-            if (watermark != null) {
-                watermark.setImageResource(R.drawable.img);
-                watermark.setVisibility(View.VISIBLE);
-                watermark.setAlpha(0);
-//                frameLayout.setImageResource(R.drawable.back);
-//                watermark.setAlpha(0.80);
-
-            }
-        } else if (theme.equals("orange")) {
-            if (watermark != null) {
-                watermark.setImageResource(R.drawable.img);
-                watermark.setVisibility(View.VISIBLE);
-                watermark.setAlpha(0);
-//                frameLayout.setImageResource(R.drawable.back);
-//                watermark.setAlpha(0.80);
-
-            }
-        } else if (theme.equals("yellow")) {
-            if (watermark != null) {
-                watermark.setImageResource(R.drawable.img);
-                watermark.setVisibility(View.VISIBLE);
-                watermark.setAlpha(0);
-//                frameLayout.setImageResource(R.drawable.back);
-//                watermark.setAlpha(0.80);
-
-            }
-        } else if (theme.equals("modern")) {
-            rootScroll.setBackgroundColor(android.graphics.Color.parseColor("#0D47A1"));
-            headerCard.setBackgroundResource(R.drawable.card_modern);
-            footerCard.setBackgroundResource(R.drawable.card_modern);
-            dateBar.setBackgroundColor(android.graphics.Color.parseColor("#1565C0"));
-            isVisibleName.setBackgroundColor(android.graphics.Color.parseColor("#0D47A1"));
-            tvName.setTextColor(android.graphics.Color.parseColor("#0D47A1"));
-            tvType.setTextColor(android.graphics.Color.parseColor("#2E7D32"));
-            tvDesc.setTextColor(android.graphics.Color.BLACK);
-            if (watermark != null) {
-                watermark.setImageResource(R.drawable.img);
-                watermark.setVisibility(View.VISIBLE);
-                watermark.setAlpha(0.2f);
-            }
-        } else if (theme.equals("gold")) {
-            rootScroll.setBackgroundColor(android.graphics.Color.parseColor("#121212"));
-            headerCard.setBackgroundColor(android.graphics.Color.parseColor("#F5F5F5"));
-            footerCard.setBackgroundColor(android.graphics.Color.parseColor("#F5F5F5"));
-            dateBar.setBackgroundColor(android.graphics.Color.parseColor("#B8860B"));
-            isVisibleName.setBackgroundColor(android.graphics.Color.parseColor("#121212"));
-            tvName.setTextColor(android.graphics.Color.parseColor("#856404"));
-            tvType.setTextColor(android.graphics.Color.parseColor("#B8860B"));
-            tvDesc.setTextColor(android.graphics.Color.parseColor("#333333"));
-            if (watermark != null) {
-                watermark.setImageResource(R.drawable.img);
-                watermark.setVisibility(View.VISIBLE);
-                watermark.setAlpha(0.2f);
-            }
-        } else {
-            // Classic (default)
-            rootScroll.setBackgroundColor(android.graphics.Color.parseColor("#8B0000"));
-            headerCard.setBackgroundResource(R.drawable.card_classic);
-            footerCard.setBackgroundResource(R.drawable.card_classic);
-            dateBar.setBackgroundColor(android.graphics.Color.parseColor("#8B0000"));
-            isVisibleName.setBackgroundColor(android.graphics.Color.parseColor("#8B0000"));
-            tvName.setTextColor(android.graphics.Color.parseColor("#8B0000"));
-            tvType.setTextColor(android.graphics.Color.BLACK);
-            tvDesc.setTextColor(android.graphics.Color.parseColor("#8B0000"));
-            if (watermark != null) {
-                watermark.setImageResource(R.drawable.img);
-                watermark.setVisibility(View.VISIBLE);
-                watermark.setAlpha(0.2f);
-            }
-        }
-
-        // Set text values
-        if (tvName != null) tvName.setText(status.getName());
+        // 2. Populate data
+        if (tvName != null)        tvName.setText(status.getName());
         if (tvDescription != null) tvDescription.setText(status.getDescription());
-        if (tvDate != null) tvDate.setText(DateConverterHindi.convertToHindi(status.getDate()));
+        if (tvDate != null)        tvDate.setText(DateConverterHindi.convertToHindi(status.getDate()));
 
-        // Apply font to all views
+        // 3. Font
         applyFontToViewGroup((ViewGroup) view);
 
-        // Handle type visibility
+        // 4. Type visibility
         if (tvType != null) {
             String type = status.getType();
             if (type != null && type.equals("अन्य")) {
@@ -593,28 +565,26 @@ public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.ViewHolder
             }
         }
 
-        // Update occasion label and icon
+        // 5. Occasion label / icon
         TextView occasionLabel = view.findViewById(R.id.occasionLabel);
         ImageView occasionIcon = view.findViewById(R.id.occasionIcon);
         if (occasionLabel != null) occasionLabel.setText(getOccasionLabel(status.getType()));
-        if (occasionIcon != null) occasionIcon.setImageResource(getOccasionIcon(status.getType()));
+        if (occasionIcon != null)  occasionIcon.setImageResource(getOccasionIcon(status.getType()));
 
-        // Handle isVisibleName visibility
-        if (isVisibleName != null) {
+        // 6. isVisibleName
+        if (isVisibleName != null)
             isVisibleName.setVisibility(status.isVisible() ? View.VISIBLE : View.GONE);
-        }
 
-        // Load image
+        // 7. Image
         if (ivImage != null) {
             File imgFile = new File(status.getImagePath());
             if (imgFile.exists()) {
-                BitmapFactory.Options options = new BitmapFactory.Options();
-                options.inJustDecodeBounds = true;
-                BitmapFactory.decodeFile(imgFile.getAbsolutePath(), options);
-                options.inSampleSize = calculateInSampleSize(options, 800, 600);
-                options.inJustDecodeBounds = false;
-                Bitmap bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath(), options);
-                ivImage.setImageBitmap(bitmap);
+                BitmapFactory.Options opts = new BitmapFactory.Options();
+                opts.inJustDecodeBounds = true;
+                BitmapFactory.decodeFile(imgFile.getAbsolutePath(), opts);
+                opts.inSampleSize = calculateInSampleSize(opts, 800, 600);
+                opts.inJustDecodeBounds = false;
+                ivImage.setImageBitmap(BitmapFactory.decodeFile(imgFile.getAbsolutePath(), opts));
             } else {
                 Log.e("ImageError", "Image not found at: " + status.getImagePath());
             }

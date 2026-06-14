@@ -1,0 +1,441 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:background="@drawable/green_bg_new"
+    android:alpha="1"
+    android:id="@+id/mainFrame"
+    android:layout_height="match_parent"
+    >
+
+
+    <ScrollView
+        android:id="@+id/rootScroll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="12dp">
+
+            <LinearLayout
+                android:id="@+id/headerCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="12dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:gravity="center"
+                    android:id="@+id/tvMantra"
+                    android:text="श्री ऋषभदेवाय नमः"
+                    android:textColor="@color/color_brown"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:id="@+id/tvOrgName"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:text="श्री भट्टारक यशकीर्ति दिगम्बर जैन"
+                    android:textColor="@color/color_green"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="70dp"
+                        android:layout_height="80dp"
+                        android:contentDescription="Left Temple Image"
+                        android:padding="4dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/left_temple_image" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical"
+                        android:paddingHorizontal="8dp">
+
+                        <TextView
+                            android:id="@+id/tvTrustName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="धर्मार्थ ट्रस्ट गुरुकुल ,ऋषभदेव"
+                            android:textColor="@color/color_green"
+                            android:textStyle="bold"
+                            android:maxLines="1"
+                            app:autoSizeTextType="uniform"
+                            app:autoSizeMinTextSize="10sp"
+                            app:autoSizeMaxTextSize="16sp"
+                            app:autoSizeStepGranularity="1sp" />
+
+
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="दैनिक शान्तिधारा एवं पूजन"
+                            android:id="@+id/tvShantiDhara"
+                            android:textColor="@color/color_brown"
+                            android:textSize="16sp"
+                            />
+                        <!-- Replace the existing "Happy Birthday" TextView with this -->
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:visibility="gone"
+                            android:orientation="horizontal">
+
+
+                            <TextView
+                                android:id="@+id/occasionLabel"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="🎂 Happy Birthday "
+                                android:textColor="@color/color_green"
+
+                                android:textSize="16sp"
+                                android:textStyle="italic" />
+                            <ImageView
+                                android:id="@+id/occasionIcon"
+                                android:layout_width="20dp"
+                                android:layout_marginStart="3dp"
+                                android:layout_height="20dp"
+                                android:layout_marginEnd="6dp"
+                                android:src="@drawable/ic_cake"
+                                android:contentDescription="occasion icon" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="70dp"
+                        android:layout_height="80dp"
+                        android:contentDescription="Right Temple Image"
+                        android:padding="4dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/right_temple_image" />
+                </LinearLayout>
+                <ImageView
+                    android:layout_width="320dp"
+                    android:layout_height="180dp"
+                    android:alpha="0.8"
+                    android:layout_marginTop="10dp"
+                    android:contentDescription="Right Temple Image"
+                    android:id="@+id/mainTemple"
+                    android:visibility="gone"
+                    android:layout_gravity="center"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/img" />
+
+                <ImageView
+                    android:id="@+id/image"
+                    android:layout_width="match_parent"
+                    android:layout_height="180dp"
+                    android:layout_marginTop="10dp"
+                    android:contentDescription="Temple Event Photo"
+                    android:scaleType="fitCenter" />
+
+                <TextView
+                    android:id="@+id/type"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:gravity="center"
+                    android:text="जन्मदिन के अवसर पर"
+                    android:textColor="@color/color_brown"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Name"
+                    android:textColor="@color/color_brown"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/discription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Discription"
+                    android:textColor="@color/color_green"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/dateBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:layout_marginHorizontal="5dp"
+                android:background="@drawable/btn_primary_bg"
+                android:orientation="vertical"
+
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="शुक्रवार 26 दिसंबर 2025"
+                    android:textColor="#FFFFFF"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:id="@+id/tvDateBarOrg"
+                    android:text="श्री भट्टारक यशकीर्ति दिगम्बर जैन धर्मार्थ ट्रस्ट गुरुकुल ऋषभदेव"
+                    android:textColor="#FFFFFF"
+                    android:textSize="14sp" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="www.gurukul-rishabhdeo.com"
+                    android:textColor="#FFFFFF"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/footerCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center"
+                    android:textStyle="bold"
+                    android:id="@+id/tvContactLabel"
+                    android:text="शान्तिधारा एवं स्थाई पूजन से संबंधित जानकारी के लिए संपर्क करें"
+                    android:textColor="@color/color_brown"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="+91-8233199334 ,+91-9785037808"
+                    android:textColor="@color/color_green"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:orientation="horizontal"
+                    android:weightSum="3">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="4dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/rounded_green_border"
+                        android:gravity="center"
+
+                        android:orientation="vertical"
+                        android:padding="8dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="श्री देवेंद्र जी\nछाप्या"
+                            android:textColor="@color/color_green"
+                            android:textAlignment="center"
+                            android:textSize="10sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="अध्यक्ष"
+                            android:id="@+id/tvPresidentRole"
+                            android:textColor="@color/color_brown"
+                            android:textSize="10sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="4dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/rounded_green_border"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="8dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="श्री सुरेश चंद्र\nकोठारी"
+                            android:textAlignment="center"
+                            android:textColor="@color/color_green"
+                            android:id="@+id/tvViceRole"
+                            android:textSize="10sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="उपाध्यक्ष"
+                            android:textColor="@color/color_brown"
+                            android:textSize="10sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/rounded_green_border"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="8dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="श्री सुंदर लाल\nभाणावत"
+                            android:textAlignment="center"
+                            android:textColor="@color/color_green"
+                            android:textSize="10sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="महामंत्री"
+                            android:textColor="@color/color_brown"
+                            android:textSize="10sp" />
+                    </LinearLayout>
+                </LinearLayout>
+                <!-- NEW OUTRO SECTION FOR THE WEBSITE (Hidden by default using alpha="0") -->
+                <LinearLayout
+                    android:id="@+id/outroWebsiteCard"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Visit our website:"
+                        android:textColor="@color/color_brown"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvWebsiteUrl"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:text="www.gurukul-rishabhdeo.com"
+                        android:textColor="@color/color_green"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/isVisibleName"
+                android:visibility="gone"
+                android:orientation="horizontal">
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:orientation="vertical"
+                    android:padding="6dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Divyesh Gandhi"
+                        android:textColor="#FFFFFF"
+                        android:textSize="8sp"
+                        android:textStyle="italic" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="9784587133"
+                        android:textColor="#FFFFFF"
+                        android:textStyle="italic"
+                        android:textSize="8sp" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:orientation="vertical"
+                    android:padding="6dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Raju Scooty"
+                        android:textColor="#FFFFFF"
+                        android:gravity="right"
+                        android:textSize="8sp"
+                        android:textStyle="italic" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="9414775522"
+                        android:textColor="#FFFFFF"
+                        android:gravity="right"
+                        android:textStyle="italic"
+                        android:textSize="8sp" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+
+    </ScrollView>
+</FrameLayout>

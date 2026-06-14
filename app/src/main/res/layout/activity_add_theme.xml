@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rootLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F5F5F5">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Create Custom Theme"
+            android:textColor="#8B0000"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <!-- Theme Name -->
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/StyledTextInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:hint="Theme Name">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etThemeName"
+                style="@style/StyledEditText"
+                android:inputType="text" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Icon Text (e.g., 'Cu') -->
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/StyledTextInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:hint="Icon Letters (e.g., My)">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etIconText"
+                style="@style/StyledEditText"
+                android:maxLength="2"
+                android:inputType="text" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Color Selectors -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="Select Theme Colors"
+            android:textColor="#333333"
+            android:textStyle="bold" />
+
+        <include layout="@layout/item_color_picker" android:id="@+id/colorBg" />
+        <include layout="@layout/item_color_picker" android:id="@+id/colorPrimary" />
+        <include layout="@layout/item_color_picker" android:id="@+id/colorSecondary" />
+        <include layout="@layout/item_color_picker" android:id="@+id/colorIconBg" />
+        <include layout="@layout/item_color_picker" android:id="@+id/colorIconText" />
+
+        <!-- Save Button -->
+        <TextView
+            android:id="@+id/btnSaveTheme"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/gradient_btn"
+            android:gravity="center"
+            android:paddingVertical="16dp"
+            android:text="Save Theme"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+</ScrollView>

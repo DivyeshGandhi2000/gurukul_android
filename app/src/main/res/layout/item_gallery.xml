@@ -86,6 +86,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginTop="16dp"
+            android:visibility="gone"
             android:background="#EEEEEE"
             app:layout_constraintTop_toBottomOf="@id/ivGalleryImage" />
 
@@ -95,6 +96,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:gravity="end"
+            android:visibility="gone"
             android:orientation="horizontal"
             app:layout_constraintTop_toBottomOf="@id/divider">
 

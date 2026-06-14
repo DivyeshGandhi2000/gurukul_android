@@ -244,6 +244,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
+                    android:visibility="gone"
                     android:clickable="true"
                     android:focusable="true"
                     app:cardBackgroundColor="#FFFFFF"
@@ -721,4 +722,19 @@
             </RadioGroup>
         </LinearLayout>
     </ScrollView>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btnAdd"
+        style="@style/WhiteIconPrimaryFAB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom|end"
+        android:visibility="gone"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:contentDescription="@string/add_button_desc"
+        android:src="@drawable/baseline_add_24"
+        app:backgroundTint="@color/primary" />
+
 </RelativeLayout>

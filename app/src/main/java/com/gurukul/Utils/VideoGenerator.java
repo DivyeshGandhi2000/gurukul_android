@@ -89,7 +89,6 @@ public class VideoGenerator {
         return MediaCodec.createEncoderByType(MediaFormat.MIMETYPE_VIDEO_AVC);
     }
 
-    // Helper method to recursively apply selected preference font to custom views
     private static void applyFontToViewGroup(Context context, ViewGroup vg) {
         if (vg == null) return;
         for (int i = 0; i < vg.getChildCount(); i++) {
@@ -163,7 +162,6 @@ public class VideoGenerator {
                         TextView     tvDate     = v.findViewById(R.id.date);
                         LinearLayout footerCard = v.findViewById(R.id.footerCard);
 
-                        // Thumbnail represents Scene 1 components
                         if (footerCard != null) footerCard.setVisibility(View.GONE);
                         if (mainTemple != null) mainTemple.setVisibility(View.GONE);
 
@@ -178,7 +176,6 @@ public class VideoGenerator {
                         tvDesc.setText(status.getDescription());
                         tvDate.setText(DateConverterHindi.convertToHindi(status.getDate()));
 
-                        // Dynamically apply selected app font family
                         applyFontToViewGroup(context, (ViewGroup) v);
 
                         String imgPath = status.getImagePath();
@@ -262,7 +259,7 @@ public class VideoGenerator {
                 final int  encWidth        = onEmulator ? 720  : 1080;
                 final int  encHeight       = onEmulator ? 1280 : 1920;
                 final int  frameRate       = onEmulator ? 15   : 30;
-                final int  totalFrames     = onEmulator ? 180  : 360;
+                final int  totalFrames     = onEmulator ? 300  : 600;
                 final int  bitRate         = onEmulator ? 2_000_000 : 8_000_000;
                 final long frameDurationUs = 1_000_000L / frameRate;
 
@@ -318,7 +315,6 @@ public class VideoGenerator {
                             tvDesc.setText(status.getDescription());
                             tvDate.setText(DateConverterHindi.convertToHindi(status.getDate()));
 
-                            // Dynamic Font Application during Warmup
                             applyFontToViewGroup(context, (ViewGroup) v);
 
                             if (footerCard != null) { footerCard.setAlpha(0f); }
@@ -394,6 +390,37 @@ public class VideoGenerator {
                         MediaMuxer.OutputFormat.MUXER_OUTPUT_MPEG_4);
 
                 int muxVideoTrack = muxer.addTrack(encoder.getOutputFormat());
+
+                // -------------------------------------------------------------
+                // ADD AUDIO TRACK SETUP START
+                // -------------------------------------------------------------
+                int muxAudioTrack = -1;
+                try {
+                    audioExtractor = new MediaExtractor();
+                    // Load background_music.mp3 from res/raw/
+                    android.content.res.AssetFileDescriptor afd = context.getResources().openRawResourceFd(R.raw.background_music);
+                    audioExtractor.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
+                    afd.close();
+
+                    for (int i = 0; i < audioExtractor.getTrackCount(); i++) {
+                        MediaFormat format = audioExtractor.getTrackFormat(i);
+                        String mime = format.getString(MediaFormat.KEY_MIME);
+                        if (mime != null && mime.startsWith("audio/")) {
+                            audioExtractor.selectTrack(i);
+                            if (!format.containsKey(MediaFormat.KEY_MAX_INPUT_SIZE)) {
+                                format.setInteger(MediaFormat.KEY_MAX_INPUT_SIZE, 1024 * 1024);
+                            }
+                            muxAudioTrack = muxer.addTrack(format);
+                            break;
+                        }
+                    }
+                } catch (Exception e) {
+                    android.util.Log.e("VideoGenerator", "Failed to setup audio track", e);
+                }
+                // -------------------------------------------------------------
+                // ADD AUDIO TRACK SETUP END
+                // -------------------------------------------------------------
+
                 muxer.start();
 
                 CountDownLatch viewLatch = new CountDownLatch(1);
@@ -435,7 +462,6 @@ public class VideoGenerator {
                         tvDesc.setText(status.getDescription());
                         tvDate.setText(DateConverterHindi.convertToHindi(status.getDate()));
 
-                        // Apply custom configuration fonts dynamically before layout measurement
                         applyFontToViewGroup(context, (ViewGroup) v);
 
                         String imgPath = status.getImagePath();
@@ -676,6 +702,43 @@ public class VideoGenerator {
                     }
                     remainingIdx = encoder.dequeueOutputBuffer(bufferInfo, 10_000);
                 }
+
+                // -------------------------------------------------------------
+                // WRITE AUDIO DATA START
+                // -------------------------------------------------------------
+                if (muxAudioTrack >= 0 && audioExtractor != null) {
+                    try {
+                        int maxBufferSize = 1024 * 1024; // 1MB buffer
+                        ByteBuffer audioBuffer = ByteBuffer.allocate(maxBufferSize);
+                        MediaCodec.BufferInfo audioBufferInfo = new MediaCodec.BufferInfo();
+
+                        long videoDurationUs = totalFrames * frameDurationUs;
+
+                        while (true) {
+                            int sampleSize = audioExtractor.readSampleData(audioBuffer, 0);
+                            if (sampleSize < 0) {
+                                break; // End of audio file reached
+                            }
+                            long sampleTimeUs = audioExtractor.getSampleTime();
+                            if (sampleTimeUs > videoDurationUs) {
+                                break; // Stop audio when video ends
+                            }
+
+                            audioBufferInfo.offset = 0;
+                            audioBufferInfo.size = sampleSize;
+                            audioBufferInfo.flags = audioExtractor.getSampleFlags();
+                            audioBufferInfo.presentationTimeUs = sampleTimeUs;
+
+                            muxer.writeSampleData(muxAudioTrack, audioBuffer, audioBufferInfo);
+                            audioExtractor.advance();
+                        }
+                    } catch (Exception e) {
+                        android.util.Log.e("VideoGenerator", "Error writing audio data", e);
+                    }
+                }
+                // -------------------------------------------------------------
+                // WRITE AUDIO DATA END
+                // -------------------------------------------------------------
 
                 android.util.Log.d("VideoGenerator", "Video created: " + outputFile.getPath());
 

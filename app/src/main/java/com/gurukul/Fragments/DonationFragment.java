@@ -108,7 +108,7 @@ public class DonationFragment extends Fragment {
                         if (jsonArray.length() == 0) {
                             // Success, but list is empty -> Show No Data UI
                             Utils.showEmptyState(emptyStateLayout, recyclerView,
-                                    android.R.drawable.ic_menu_info_details,
+                                    R.drawable.no_data,
                                     getString(R.string.no_donations_found),
                                     getString(R.string.no_donations_message),
                                     false,

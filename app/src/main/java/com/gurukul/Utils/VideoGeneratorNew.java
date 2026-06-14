@@ -113,7 +113,7 @@ public class VideoGeneratorNew {
                 viewHandler.post(() -> {
                     try {
                         View v = LayoutInflater.from(context)
-                                .inflate(R.layout.item_video2_new_xml, null);
+                                .inflate(R.layout.item_video23_new_xml, null);
 
                         ImageView    mainImage  = v.findViewById(R.id.image);
                         ImageView    mainTemple = v.findViewById(R.id.mainTemple);
@@ -122,12 +122,10 @@ public class VideoGeneratorNew {
                         TextView     tvDesc     = v.findViewById(R.id.discription);
                         TextView     tvDate     = v.findViewById(R.id.date);
                         LinearLayout footerCard = v.findViewById(R.id.footerCard);
-//                        View         vSpace     = v.findViewById(R.id.vSpace);
 
                         // Thumbnail represents Scene 1 components
                         if (footerCard != null) footerCard.setVisibility(View.GONE);
                         if (mainTemple != null) mainTemple.setVisibility(View.GONE);
-//                        if (vSpace != null) vSpace.setVisibility(View.VISIBLE);
 
                         String typeText = status.getType();
                         if (typeText != null && typeText.equals("अन्य")) {
@@ -218,10 +216,12 @@ public class VideoGeneratorNew {
                 File outputFile = new File(cacheDir,
                         "Shantidhara_status_" + System.currentTimeMillis() + ".mp4");
 
+                // --- TO INCREASE VIDEO LENGTH, CHANGE 'totalFrames' BELOW ---
+                // Example: for 15 seconds: onEmulator ? 225 : 450
                 final int  encWidth        = onEmulator ? 720  : 1080;
                 final int  encHeight       = onEmulator ? 1280 : 1920;
                 final int  frameRate       = onEmulator ? 15   : 30;
-                final int  totalFrames     = onEmulator ? 180  : 360;
+                final int  totalFrames     = onEmulator ? 300  : 600;
                 final int  bitRate         = onEmulator ? 2_000_000 : 8_000_000;
                 final long frameDurationUs = 1_000_000L / frameRate;
 
@@ -252,7 +252,7 @@ public class VideoGeneratorNew {
                     viewHandler.post(() -> {
                         try {
                             View v = LayoutInflater.from(context)
-                                    .inflate(R.layout.item_video2_new_xml, null);
+                                    .inflate(R.layout.item_video23_new_xml, null);
 
                             ImageView    mainImage  = v.findViewById(R.id.image);
                             ImageView    mainTemple = v.findViewById(R.id.mainTemple);
@@ -263,10 +263,8 @@ public class VideoGeneratorNew {
                             LinearLayout footerCard = v.findViewById(R.id.footerCard);
                             LinearLayout headerCard = v.findViewById(R.id.headerCard);
                             TextView     tvWebsite  = v.findViewById(R.id.tvWebsiteUrl);
-//                            View         vSpace     = v.findViewById(R.id.vSpace);
 
                             if (mainTemple != null) mainTemple.setVisibility(View.GONE);
-//                            if (vSpace != null) vSpace.setVisibility(View.VISIBLE);
 
                             String typeText = status.getType();
                             if (typeText != null && typeText.equals("अन्य")) {
@@ -352,6 +350,36 @@ public class VideoGeneratorNew {
                         MediaMuxer.OutputFormat.MUXER_OUTPUT_MPEG_4);
 
                 int muxVideoTrack = muxer.addTrack(encoder.getOutputFormat());
+
+                // -------------------------------------------------------------
+                // ADD AUDIO TRACK SETUP START
+                // -------------------------------------------------------------
+                int muxAudioTrack = -1;
+                try {
+                    audioExtractor = new MediaExtractor();
+                    android.content.res.AssetFileDescriptor afd = context.getResources().openRawResourceFd(R.raw.background_music);
+                    audioExtractor.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
+                    afd.close();
+
+                    for (int i = 0; i < audioExtractor.getTrackCount(); i++) {
+                        MediaFormat format = audioExtractor.getTrackFormat(i);
+                        String mime = format.getString(MediaFormat.KEY_MIME);
+                        if (mime != null && mime.startsWith("audio/")) {
+                            audioExtractor.selectTrack(i);
+                            if (!format.containsKey(MediaFormat.KEY_MAX_INPUT_SIZE)) {
+                                format.setInteger(MediaFormat.KEY_MAX_INPUT_SIZE, 1024 * 1024);
+                            }
+                            muxAudioTrack = muxer.addTrack(format);
+                            break;
+                        }
+                    }
+                } catch (Exception e) {
+                    android.util.Log.e("VideoGeneratorNew", "Failed to setup audio track", e);
+                }
+                // -------------------------------------------------------------
+                // ADD AUDIO TRACK SETUP END
+                // -------------------------------------------------------------
+
                 muxer.start();
 
                 CountDownLatch viewLatch = new CountDownLatch(1);
@@ -365,12 +393,11 @@ public class VideoGeneratorNew {
                 AtomicReference<LinearLayout> footerCardRef = new AtomicReference<>();
                 AtomicReference<LinearLayout> headerCardRef = new AtomicReference<>();
                 AtomicReference<TextView>     tvWebsiteRef  = new AtomicReference<>();
-//                AtomicReference<View>         vSpaceRef     = new AtomicReference<>();
 
                 viewHandler.post(() -> {
                     try {
                         View v = LayoutInflater.from(context)
-                                .inflate(R.layout.item_video2_new_xml, null);
+                                .inflate(R.layout.item_video23_new_xml, null);
 
                         ImageView    mainImage  = v.findViewById(R.id.image);
                         ImageView    mainTemple = v.findViewById(R.id.mainTemple);
@@ -382,7 +409,6 @@ public class VideoGeneratorNew {
                         LinearLayout footerCard = v.findViewById(R.id.footerCard);
                         LinearLayout headerCard = v.findViewById(R.id.headerCard);
                         TextView     tvWebsite  = v.findViewById(R.id.tvWebsiteUrl);
-//                        View         vSpace     = v.findViewById(R.id.vSpace);
 
                         String typeText = status.getType();
                         if (typeText != null && typeText.equals("अन्य")) {
@@ -427,7 +453,6 @@ public class VideoGeneratorNew {
                         footerCardRef.set(footerCard);
                         headerCardRef.set(headerCard);
                         tvWebsiteRef.set(tvWebsite);
-//                        vSpaceRef.set(vSpace);
                     } finally {
                         viewLatch.countDown();
                     }
@@ -445,7 +470,6 @@ public class VideoGeneratorNew {
                 LinearLayout footerCard = footerCardRef.get();
                 LinearLayout headerCard = headerCardRef.get();
                 TextView     tvWebsite  = tvWebsiteRef.get();
-//                View         vSpace     = vSpaceRef.get();
 
                 MediaCodec.BufferInfo bufferInfo = new MediaCodec.BufferInfo();
                 long presentationTimeUs = 0L;
@@ -462,7 +486,6 @@ public class VideoGeneratorNew {
                             if (frame == 0) {
                                 // Frame 0 = Thumbnail Setup (Scene 1)
                                 if (mainTemple != null) mainTemple.setVisibility(View.GONE);
-//                                if (vSpace != null) vSpace.setVisibility(View.VISIBLE);
                                 mainImage.setVisibility(View.VISIBLE);
                                 tvType.setVisibility(View.VISIBLE);
                                 tvName.setVisibility(View.VISIBLE);
@@ -499,10 +522,6 @@ public class VideoGeneratorNew {
                                         tvDesc.setVisibility(View.GONE);
                                         dateBar.setVisibility(View.GONE);
 
-                                        // KEEP SPACE VISIBLE: By keeping it visible, it sits between
-                                        // headerCard and mainTemple, pushing your temple image down
-                                        // into the layout space so everything doesn't crunch at the top.
-//                                        if (vSpace != null) vSpace.setVisibility(View.VISIBLE);
                                         if (mainTemple != null) mainTemple.setVisibility(View.VISIBLE);
 
                                         // Apply updated structural calculation metrics
@@ -544,7 +563,6 @@ public class VideoGeneratorNew {
                                         tvDesc.setVisibility(View.VISIBLE);
                                         dateBar.setVisibility(View.VISIBLE);
 
-//                                        if (vSpace != null) vSpace.setVisibility(View.VISIBLE);
                                         if (mainTemple != null) mainTemple.setVisibility(View.GONE);
 
                                         view.measure(View.MeasureSpec.makeMeasureSpec(nW, View.MeasureSpec.EXACTLY),
@@ -645,6 +663,42 @@ public class VideoGeneratorNew {
                     }
                     remainingIdx = encoder.dequeueOutputBuffer(bufferInfo, 10_000);
                 }
+
+                // -------------------------------------------------------------
+                // WRITE AUDIO DATA START
+                // -------------------------------------------------------------
+                if (muxAudioTrack >= 0 && audioExtractor != null) {
+                    try {
+                        int maxBufferSize = 1024 * 1024; // 1MB buffer
+                        ByteBuffer audioBuffer = ByteBuffer.allocate(maxBufferSize);
+                        MediaCodec.BufferInfo audioBufferInfo = new MediaCodec.BufferInfo();
+                        long videoDurationUs = totalFrames * frameDurationUs;
+
+                        while (true) {
+                            int sampleSize = audioExtractor.readSampleData(audioBuffer, 0);
+                            if (sampleSize < 0) {
+                                break; // End of audio file reached
+                            }
+                            long sampleTimeUs = audioExtractor.getSampleTime();
+                            if (sampleTimeUs > videoDurationUs) {
+                                break; // Stop audio when video ends
+                            }
+
+                            audioBufferInfo.offset = 0;
+                            audioBufferInfo.size = sampleSize;
+                            audioBufferInfo.flags = audioExtractor.getSampleFlags();
+                            audioBufferInfo.presentationTimeUs = sampleTimeUs;
+
+                            muxer.writeSampleData(muxAudioTrack, audioBuffer, audioBufferInfo);
+                            audioExtractor.advance();
+                        }
+                    } catch (Exception e) {
+                        android.util.Log.e("VideoGeneratorNew", "Error writing audio data", e);
+                    }
+                }
+                // -------------------------------------------------------------
+                // WRITE AUDIO DATA END
+                // -------------------------------------------------------------
 
                 android.util.Log.d("VideoGenerator", "Video created: " + outputFile.getPath());
 

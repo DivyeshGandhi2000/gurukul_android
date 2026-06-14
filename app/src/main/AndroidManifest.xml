@@ -48,6 +48,8 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".activity.VideoColorActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".activity.AddThemeActivity"
+            android:screenOrientation="portrait"/>
         <service
             android:name=".AutoDeleteService"
             android:enabled="true"
