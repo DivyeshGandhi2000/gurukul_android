@@ -66,6 +66,8 @@
     <string name="select_video_template">वीडियो टेम्पलेट चुनें</string>
     <string name="no_data_found">कोई डेटा नहीं मिला !</string>
     <string name="logout">लॉग आउट</string>
+    <string name="logout_message">क्या आप लॉग आउट करना चाहते हैं?</string>
+    <string name="no_data_message">हमें इस समय दिखाने के लिए कोई डेटा नहीं मिला।</string>
     <string name="search_hint">नाम / दिनांक द्वारा खोजें</string>
     <string name="add_button_desc">जोड़ें बटन</string>
     <string name="home">होम</string>

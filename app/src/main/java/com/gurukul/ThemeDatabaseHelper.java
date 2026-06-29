@@ -101,18 +101,6 @@ public class ThemeDatabaseHelper extends SQLiteOpenHelper {
                 "#F3E5F5", "Mo", "#7B1FA2",
                 2, true));
 
-        // gold — uses item_status_xml layout
-        insert(db, new ThemeConfig(
-                "gold", "Gold Theme",
-                "#121212", null,
-                "#856404", "#B8860B",
-                "#B8860B", null,
-                "rounded_border", null, null,
-                0.2f,
-                "#FFF8E1", "Go", "#F57F17",
-                3, true));
-
-        // blue (cyan) — uses item_statusnew_xml layout, no color overrides
         insert(db, new ThemeConfig(
                 "blue", "Cyan Blue Theme",
                 null, "back",
@@ -123,7 +111,6 @@ public class ThemeDatabaseHelper extends SQLiteOpenHelper {
                 "#E0F7FA", "Cy", "#00838F",
                 4, true));
 
-        // green — uses item_status_green layout
         insert(db, new ThemeConfig(
                 "green", "Green Theme",
                 null, "green_bg_new",

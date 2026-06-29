@@ -27,6 +27,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
+import com.gurukul.LoginActivity;
 import com.gurukul.R;
 import com.gurukul.Utils.Constants;
 import com.gurukul.Utils.Utils;
@@ -45,6 +46,7 @@ public class SettingsFragment extends Fragment {
         View SelectFontFamily = view.findViewById(R.id.SelectFontFamily);
         View SelectVideoTheme = view.findViewById(R.id.SelectVideoTheme);
         View ChangelanguageBtn = view.findViewById(R.id.ChangelanguageBtn);
+        View logoutBtn = view.findViewById(R.id.logoutBtn);
 
         selectTemplateTheme.setOnClickListener(v -> {
             Intent intent = new Intent(requireContext(), ImageTeamLayout.class);
@@ -59,6 +61,7 @@ public class SettingsFragment extends Fragment {
             startActivity(intent);
         });
         ChangelanguageBtn.setOnClickListener(v -> changeLanguage());
+        logoutBtn.setOnClickListener(v -> LogoutDialog());
         return view;
 
     }
@@ -111,6 +114,55 @@ public class SettingsFragment extends Fragment {
             dialogRootView.setPadding(paddingInPixels, dialogRootView.getPaddingTop(),
                     paddingInPixels, dialogRootView.getPaddingBottom());
         }
+        dialog.show();
+    }
+    private void LogoutDialog() {
+        LayoutInflater inflater = LayoutInflater.from(getActivity());
+        View dialogView = inflater.inflate(R.layout.dialog_logout, null);
+
+        AlertDialog dialog = new AlertDialog.Builder(getActivity())
+                .setView(dialogView)
+                .setCancelable(true)
+                .create();
+
+        // Assuming you have these IDs in your dialog_logout.xml
+        TextView titleTv = dialogView.findViewById(R.id.deliteTitleTv);
+        TextView buttonCancel = dialogView.findViewById(R.id.button_cancel);
+        TextView buttonOk = dialogView.findViewById(R.id.button_ok);
+
+        buttonOk.setOnClickListener(v -> {
+            FragmentActivity activity = getActivity();
+            if (activity == null) return;
+
+            // 1. Update SharedPreferences to log the user out
+            activity.getSharedPreferences("app_pref", Context.MODE_PRIVATE)
+                    .edit()
+                    .putBoolean("isLoggedIn", false)
+                    .apply();
+
+            // 2. Intent to navigate back to LoginActivity
+            Intent intent = new Intent(activity, LoginActivity.class);
+
+            // 3. Clear the back stack so the user cannot use the back button to re-enter
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+
+            // 4. Dismiss dialog and finish the current hosting activity
+            dialog.dismiss();
+            activity.finish();
+        });
+
+        buttonCancel.setOnClickListener(v -> dialog.dismiss());
+
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            View dialogRootView = dialog.getWindow().getDecorView();
+            int paddingInPixels = (int) (10 * getResources().getDisplayMetrics().density);
+
+            dialogRootView.setPadding(paddingInPixels, dialogRootView.getPaddingTop(),
+                    paddingInPixels, dialogRootView.getPaddingBottom());
+        }
+
         dialog.show();
     }
 

@@ -527,7 +527,12 @@ public class VideoGenerator {
                     viewHandler.post(() -> {
                         try {
                             if (frame == 0) {
-                                if (mainTemple != null) mainTemple.setVisibility(View.GONE);
+                                if (mainTemple != null) {
+                                    mainTemple.setVisibility(View.GONE);
+                                    mainTemple.setAlpha(0f);
+                                    mainTemple.setScaleX(0.8f);
+                                    mainTemple.setScaleY(0.8f);
+                                }
                                 mainImage.setVisibility(View.VISIBLE);
                                 tvType.setVisibility(View.VISIBLE);
                                 tvName.setVisibility(View.VISIBLE);
@@ -564,11 +569,13 @@ public class VideoGenerator {
                                         dateBar.setVisibility(View.GONE);
 
                                         if (mainTemple != null) mainTemple.setVisibility(View.VISIBLE);
-
-                                        view.measure(View.MeasureSpec.makeMeasureSpec(nW, View.MeasureSpec.EXACTLY),
-                                                View.MeasureSpec.makeMeasureSpec(nH, View.MeasureSpec.EXACTLY));
-                                        view.layout(0, 0, nW, nH);
                                     }
+
+                                    view.measure(
+                                            View.MeasureSpec.makeMeasureSpec(nW, View.MeasureSpec.EXACTLY),
+                                            View.MeasureSpec.makeMeasureSpec(nH, View.MeasureSpec.EXACTLY)
+                                    );
+                                    view.layout(0, 0, nW, nH);
 
                                     float scene2Anim = window(tAnim, 0.55f, 1.0f);
                                     float templeIn   = easeOutCubic(window(scene2Anim, 0.05f, 0.25f));

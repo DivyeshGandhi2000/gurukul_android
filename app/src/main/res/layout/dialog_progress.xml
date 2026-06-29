@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
+    style="@style/dialog_card">
+
+    <LinearLayout
+        style="@style/dialog_margins"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="24dp">
+
+        <TextView
+            android:id="@+id/progressTitleTv"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:textColor="@color/primary"
+            android:textSize="18sp"
+            android:text="Creating Video"
+            android:layout_marginHorizontal="24dp"
+            android:textStyle="bold"
+            android:layout_marginVertical="5dp" />
+
+        <TextView
+            android:id="@+id/progressMessageTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Rendering frame 0%"
+            android:textSize="14sp"
+            android:textColor="@color/lightgray"
+            android:layout_marginHorizontal="24dp" />
+
+        <ProgressBar
+            android:id="@+id/progressBarHorizontal"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginTop="16dp"
+            android:max="100" />
+
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

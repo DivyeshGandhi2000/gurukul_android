@@ -474,6 +474,9 @@ public class VideoGeneratorNew {
                 MediaCodec.BufferInfo bufferInfo = new MediaCodec.BufferInfo();
                 long presentationTimeUs = 0L;
 
+                final boolean isAnya = status.getType() != null && status.getType().equals("अन्य");
+                final boolean hasImage = status.getImagePath() != null && !status.getImagePath().isEmpty() && new File(status.getImagePath()).exists();
+
                 for (int i = 0; i < totalFrames; i++) {
                     final float tFinal = (float) i / totalFrames;
                     final int   frame  = i;
@@ -485,9 +488,16 @@ public class VideoGeneratorNew {
                         try {
                             if (frame == 0) {
                                 // Frame 0 = Thumbnail Setup (Scene 1)
-                                if (mainTemple != null) mainTemple.setVisibility(View.GONE);
-                                mainImage.setVisibility(View.VISIBLE);
-                                tvType.setVisibility(View.VISIBLE);
+                                if (mainTemple != null) {
+                                    mainTemple.setVisibility(View.GONE);
+                                    mainTemple.setAlpha(0f);
+                                    mainTemple.setScaleX(0.8f);
+                                    mainTemple.setScaleY(0.8f);
+                                }
+                                
+                                mainImage.setVisibility(hasImage ? View.VISIBLE : View.GONE);
+                                tvType.setVisibility(isAnya ? View.GONE : View.VISIBLE);
+                                
                                 tvName.setVisibility(View.VISIBLE);
                                 tvDesc.setVisibility(View.VISIBLE);
                                 dateBar.setVisibility(View.VISIBLE);
@@ -514,8 +524,7 @@ public class VideoGeneratorNew {
                                 boolean isScene2 = (tAnim > 0.55f);
 
                                 if (isScene2) {
-                                    // --- SCENE 2: The Temple and Footer Cards ---
-                                    if (mainImage.getVisibility() == View.VISIBLE) {
+                                    if (dateBar.getVisibility() == View.VISIBLE) {
                                         mainImage.setVisibility(View.GONE);
                                         tvType.setVisibility(View.GONE);
                                         tvName.setVisibility(View.GONE);
@@ -523,8 +532,6 @@ public class VideoGeneratorNew {
                                         dateBar.setVisibility(View.GONE);
 
                                         if (mainTemple != null) mainTemple.setVisibility(View.VISIBLE);
-
-                                        // Apply updated structural calculation metrics
                                         view.measure(View.MeasureSpec.makeMeasureSpec(nW, View.MeasureSpec.EXACTLY),
                                                 View.MeasureSpec.makeMeasureSpec(nH, View.MeasureSpec.EXACTLY));
                                         view.layout(0, 0, nW, nH);
@@ -555,21 +562,17 @@ public class VideoGeneratorNew {
                                     }
 
                                 } else {
-                                    // --- SCENE 1: Status Card Details ---
-                                    if (mainImage.getVisibility() == View.GONE) {
-                                        mainImage.setVisibility(View.VISIBLE);
-                                        tvType.setVisibility(View.VISIBLE);
+                                    if (dateBar.getVisibility() == View.GONE) {
+                                        mainImage.setVisibility(hasImage ? View.VISIBLE : View.GONE);
+                                        tvType.setVisibility(isAnya ? View.GONE : View.VISIBLE);
                                         tvName.setVisibility(View.VISIBLE);
                                         tvDesc.setVisibility(View.VISIBLE);
                                         dateBar.setVisibility(View.VISIBLE);
-
                                         if (mainTemple != null) mainTemple.setVisibility(View.GONE);
-
                                         view.measure(View.MeasureSpec.makeMeasureSpec(nW, View.MeasureSpec.EXACTLY),
                                                 View.MeasureSpec.makeMeasureSpec(nH, View.MeasureSpec.EXACTLY));
                                         view.layout(0, 0, nW, nH);
                                     }
-
                                     float scene1Anim = window(tAnim, 0.0f, 0.55f);
                                     float dateIn    = easeOutCubic(window(scene1Anim, 0.00f, 0.15f));
                                     float headerIn  = easeOutBack (window(scene1Anim, 0.05f, 0.20f));

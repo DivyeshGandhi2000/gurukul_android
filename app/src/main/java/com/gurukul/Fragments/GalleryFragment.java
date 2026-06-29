@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -22,6 +23,7 @@ import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.gurukul.Utils.Constants;
+import com.gurukul.Utils.Utils;
 import com.gurukul.adapters.GalleryAdapter;
 import com.gurukul.Models.GalleryModel;
 import com.gurukul.R;
@@ -39,9 +41,10 @@ public class GalleryFragment extends Fragment {
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
     private GalleryAdapter adapter;
+    private LinearLayout emptyStateLayout;
     private List<GalleryModel> galleryList;
 
-    private static final String API_URL = Constants.BASE_URL +Constants.GALLERY_IMAGE_API;
+    private static final String API_URL = Constants.BASE_URL + Constants.GALLERY_IMAGE_API;
     private static final String TAG = "GalleryAPI";
 
     public GalleryFragment() {
@@ -54,8 +57,9 @@ public class GalleryFragment extends Fragment {
 
         recyclerView = view.findViewById(R.id.recyclerViewGallery);
         progressBar = view.findViewById(R.id.progressBar);
+        emptyStateLayout = view.findViewById(R.id.empty_state_layout);
 
-        // Set up 2-column Grid
+        // Set up 1-column Grid (matches your current code)
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
         galleryList = new ArrayList<>();
         adapter = new GalleryAdapter(getContext(), galleryList);
@@ -69,6 +73,7 @@ public class GalleryFragment extends Fragment {
 
     private void fetchGalleryImages() {
 
+        Utils.hideEmptyState(emptyStateLayout, recyclerView);
         progressBar.setVisibility(View.VISIBLE);
 
         Log.d(TAG, "========== API REQUEST ==========");
@@ -90,15 +95,19 @@ public class GalleryFragment extends Fragment {
 
                         galleryList.clear();
 
-                        // ✅ FIX: API returns a JSONObject wrapper, not a plain JSONArray
+                        // API returns a JSONObject wrapper
                         JSONObject rootObject = new JSONObject(response);
-
                         boolean status = rootObject.optBoolean("status", false);
 
                         if (!status) {
-                            String message = rootObject.optString("message", "Unknown error");
+                            String message = rootObject.optString("message", getString(R.string.something_went_wrong));
                             Log.e(TAG, "API returned status false: " + message);
-                            Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
+                            Utils.showEmptyState(emptyStateLayout, recyclerView,
+                                    android.R.drawable.ic_dialog_alert,
+                                    getString(R.string.something_went_wrong),
+                                    message,
+                                    true,
+                                    v -> fetchGalleryImages());
                             return;
                         }
 
@@ -106,31 +115,35 @@ public class GalleryFragment extends Fragment {
 
                         Log.d(TAG, "Total Records: " + jsonArray.length());
 
+                        if (jsonArray.length() == 0) {
+                            // Success, but list is empty -> Show No Data UI
+                            Utils.showEmptyState(emptyStateLayout, recyclerView,
+                                    R.drawable.no_data,
+                                    getString(R.string.no_data_found), // Replace with your string if needed
+                                    getString(R.string.no_data_message), // Replace with your string if needed
+                                    false,
+                                    null);
+                            return;
+                        }
+
                         for (int i = 0; i < jsonArray.length(); i++) {
 
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
 
-                            try {
-                                String readable = new String(jsonObject.toString().getBytes("ISO-8859-1"), "UTF-8");
-                                Log.d(TAG, "Item " + i + ": " + readable);
-                            } catch (Exception e) {
-                                Log.d(TAG, "Item " + i + ": " + jsonObject.toString());
-                            }
                             String id          = jsonObject.optString("id", "");
                             String title       = jsonObject.optString("title", "").trim();
-                            String description = jsonObject.optString("description", "").trim();  // ← ADD
-                            String category    = jsonObject.optString("category", "").trim();     // ← ADD
-                            String createdAt   = jsonObject.optString("created_at", "");          // ← ADD
+                            String description = jsonObject.optString("description", "").trim();
+                            String category    = jsonObject.optString("category", "").trim();
+                            String createdAt   = jsonObject.optString("created_at", "");
                             String imageUrl    = jsonObject.optString("image", "");
 
-                            if (!imageUrl.startsWith("http")) {
+                            if (!imageUrl.isEmpty() && !imageUrl.startsWith("http")) {
                                 imageUrl = Constants.IMAGE_BASE_URL + imageUrl;
                             }
 
                             Log.d(TAG, "ID: " + id);
                             Log.d(TAG, "Image URL: " + imageUrl);
 
-                            // ← UPDATED: pass all 6 fields
                             galleryList.add(new GalleryModel(id, title, description, category, imageUrl, createdAt));
                         }
                         adapter.notifyDataSetChanged();
@@ -140,11 +153,12 @@ public class GalleryFragment extends Fragment {
                         Log.e(TAG, "JSON ERROR", e);
                         Log.e(TAG, "Raw Response: " + response);
 
-                        Toast.makeText(
-                                getContext(),
-                                "JSON Parsing Error",
-                                Toast.LENGTH_LONG
-                        ).show();
+                        Utils.showEmptyState(emptyStateLayout, recyclerView,
+                                android.R.drawable.ic_dialog_alert,
+                                getString(R.string.data_error),
+                                getString(R.string.failed_to_read_data),
+                                true,
+                                v -> fetchGalleryImages());
                     }
                 },
 
@@ -155,24 +169,15 @@ public class GalleryFragment extends Fragment {
                     Log.e(TAG, "========== API ERROR ==========");
 
                     if (error.networkResponse != null) {
-
                         Log.e(TAG, "Status Code: " + error.networkResponse.statusCode);
-
                         try {
-                            String errorBody = new String(
-                                    error.networkResponse.data,
-                                    "UTF-8"
-                            );
+                            String errorBody = new String(error.networkResponse.data, "UTF-8");
                             Log.e(TAG, "Error Body: " + errorBody);
-
                         } catch (Exception ex) {
                             Log.e(TAG, "Error reading body", ex);
                         }
-
                     } else {
-
                         Log.e(TAG, "Network Response NULL");
-
                         if (error.getCause() != null) {
                             Log.e(TAG, "Cause: " + error.getCause().toString());
                         }
@@ -180,11 +185,22 @@ public class GalleryFragment extends Fragment {
 
                     Log.e(TAG, "Volley Message: " + error.toString(), error);
 
-                    Toast.makeText(
-                            getContext(),
-                            "Failed to load images",
-                            Toast.LENGTH_LONG
-                    ).show();
+                    // Differentiate between Network Error and Server Error
+                    if (error instanceof com.android.volley.NoConnectionError || error instanceof com.android.volley.TimeoutError) {
+                        Utils.showEmptyState(emptyStateLayout, recyclerView,
+                                android.R.drawable.ic_dialog_dialer, // Replace with your no_internet drawable
+                                getString(R.string.no_internet_connection),
+                                getString(R.string.check_network_settings),
+                                true,
+                                v -> fetchGalleryImages());
+                    } else {
+                        Utils.showEmptyState(emptyStateLayout, recyclerView,
+                                android.R.drawable.ic_dialog_alert,
+                                getString(R.string.server_error),
+                                getString(R.string.unable_to_connect_server),
+                                true,
+                                v -> fetchGalleryImages());
+                    }
                 }
         ) {
             @Override
@@ -196,7 +212,6 @@ public class GalleryFragment extends Fragment {
             public String getBodyContentType() {
                 return "application/json; charset=UTF-8";
             }
-
 
             @Override
             protected Response<String> parseNetworkResponse(NetworkResponse response) {

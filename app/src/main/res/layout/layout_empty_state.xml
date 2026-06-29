@@ -19,7 +19,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/no_data_found"
-        android:textColor="#212121"
+        android:textColor="@color/primary"
         android:textSize="18sp"
         android:textStyle="bold" />
 
@@ -38,6 +38,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
+        android:backgroundTint="@color/primary"
         android:text="Retry"
         android:visibility="gone" />
 

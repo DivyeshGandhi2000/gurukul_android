@@ -19,6 +19,8 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@+id/fakeStatusBar"
+        android:layout_marginTop="0dp"
         android:background="#F5F5F5"
         android:fillViewport="true">
 
@@ -68,10 +70,10 @@
                             app:cardBackgroundColor="#1976D2"
                             app:cardCornerRadius="28dp"
                             app:cardElevation="0dp"
-                            app:strokeWidth="0dp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent">
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:strokeWidth="0dp">
 
                             <ImageView
                                 android:layout_width="32dp"
@@ -117,13 +119,13 @@
                             android:id="@+id/ivViewBlue"
                             android:layout_width="36dp"
                             android:layout_height="36dp"
-                            android:visibility="gone"
                             android:layout_marginEnd="8dp"
                             android:background="?attr/selectableItemBackgroundBorderless"
                             android:clickable="true"
                             android:focusable="true"
                             android:padding="6dp"
                             android:src="@drawable/outline_eye_tracking_24"
+                            android:visibility="gone"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toStartOf="@+id/radioVideoBlue"
                             app:layout_constraintTop_toTopOf="parent"
@@ -166,10 +168,10 @@
                             app:cardBackgroundColor="#795548"
                             app:cardCornerRadius="28dp"
                             app:cardElevation="0dp"
-                            app:strokeWidth="0dp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent">
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:strokeWidth="0dp">
 
                             <ImageView
                                 android:layout_width="32dp"
@@ -216,12 +218,12 @@
                             android:layout_width="36dp"
                             android:layout_height="36dp"
                             android:layout_marginEnd="8dp"
-                            android:visibility="gone"
                             android:background="?attr/selectableItemBackgroundBorderless"
                             android:clickable="true"
                             android:focusable="true"
                             android:padding="6dp"
                             android:src="@drawable/outline_eye_tracking_24"
+                            android:visibility="gone"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toStartOf="@+id/radioVideoBrown"
                             app:layout_constraintTop_toTopOf="parent"
@@ -264,10 +266,10 @@
                             app:cardBackgroundColor="#F44336"
                             app:cardCornerRadius="28dp"
                             app:cardElevation="0dp"
-                            app:strokeWidth="0dp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent">
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:strokeWidth="0dp">
 
                             <ImageView
                                 android:layout_width="32dp"
@@ -314,12 +316,12 @@
                             android:layout_width="36dp"
                             android:layout_height="36dp"
                             android:layout_marginEnd="8dp"
-                            android:visibility="gone"
                             android:background="?attr/selectableItemBackgroundBorderless"
                             android:clickable="true"
                             android:focusable="true"
                             android:padding="6dp"
                             android:src="@drawable/outline_eye_tracking_24"
+                            android:visibility="gone"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toStartOf="@+id/radioVideoRed"
                             app:layout_constraintTop_toTopOf="parent"
@@ -362,10 +364,10 @@
                             app:cardBackgroundColor="#4CAF50"
                             app:cardCornerRadius="28dp"
                             app:cardElevation="0dp"
-                            app:strokeWidth="0dp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent">
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:strokeWidth="0dp">
 
                             <ImageView
                                 android:layout_width="32dp"
@@ -414,10 +416,10 @@
                             android:layout_marginEnd="8dp"
                             android:background="?attr/selectableItemBackgroundBorderless"
                             android:clickable="true"
-                            android:visibility="gone"
                             android:focusable="true"
                             android:padding="6dp"
                             android:src="@drawable/outline_eye_tracking_24"
+                            android:visibility="gone"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toStartOf="@+id/radioVideoGreen"
                             app:layout_constraintTop_toTopOf="parent"

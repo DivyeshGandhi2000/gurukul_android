@@ -13,6 +13,7 @@
         android:layout_height="match_parent"
         android:clipToPadding="false"
         android:padding="8dp" />
+    <include layout="@layout/layout_empty_state" />
 
     <ProgressBar
         android:id="@+id/progressBar"

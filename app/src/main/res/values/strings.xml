@@ -49,6 +49,7 @@
     <string name="select_font_style">Select Font Style</string>
     <string name="select_video_template">Select Video Template</string>
     <string name="logout">Logout</string>
+    <string name="logout_message">Are you sure you want to log out?</string>
     <string name="no_data_found">No Data Found !</string>
     <string name="search_hint">Search by Name/ Date</string>
     <string name="add_button_desc">Add button</string>
@@ -56,6 +57,7 @@
     <string name="gallery">Gallery</string>
     <string name="donate">Donate</string>
     <string name="something_went_wrong">Something went wrong</string>
+    <string name="no_data_message">We couldn\'t find any data to display at the moment.</string>
     <string name="no_donations_found">No Donations Found</string>
     <string name="no_donations_message">There are currently no donations available to display.</string>
     <string name="data_error">Data Error</string>

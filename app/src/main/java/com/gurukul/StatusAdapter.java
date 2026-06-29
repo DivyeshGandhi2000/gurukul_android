@@ -1,6 +1,7 @@
 package com.gurukul;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -10,6 +11,8 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -186,13 +190,31 @@ public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.ViewHolder
 //            }
 //        });
         holder.btndownload.setOnClickListener(v -> {
-            ProgressDialog progressDialog = new ProgressDialog(context);
-            progressDialog.setTitle("Creating Video");
-            progressDialog.setMessage("Rendering frame 0%");
-            progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-            progressDialog.setMax(100);
-            progressDialog.setCancelable(false);
-            progressDialog.show();
+
+            // 1. Setup Custom Dialog Layout
+            LayoutInflater inflater = LayoutInflater.from(context);
+            View dialogView = inflater.inflate(R.layout.dialog_progress, null);
+
+            AlertDialog customProgressDialog = new AlertDialog.Builder(context)
+                    .setView(dialogView)
+                    .setCancelable(false)
+                    .create();
+
+            // 2. Initialize Views inside Dialog
+            TextView titleTv = dialogView.findViewById(R.id.progressTitleTv);
+            TextView messageTv = dialogView.findViewById(R.id.progressMessageTv);
+            ProgressBar progressBar = dialogView.findViewById(R.id.progressBarHorizontal);
+
+            // 3. Apply uniform transparent background styling (Matches LogoutDialog)
+            if (customProgressDialog.getWindow() != null) {
+                customProgressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                View dialogRootView = customProgressDialog.getWindow().getDecorView();
+                int paddingInPixels = (int) (10 * context.getResources().getDisplayMetrics().density);
+                dialogRootView.setPadding(paddingInPixels, dialogRootView.getPaddingTop(),
+                        paddingInPixels, dialogRootView.getPaddingBottom());
+            }
+
+            customProgressDialog.show();
 
             SharedPreferences prefs = context.getSharedPreferences("AppPrefs", Context.MODE_PRIVATE);
             String videoColor = prefs.getString("video_color", "blue");
@@ -203,15 +225,15 @@ public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.ViewHolder
                         @Override
                         public void onProgress(int percentage) {
                             ((Activity) context).runOnUiThread(() -> {
-                                progressDialog.setProgress(percentage);
-                                progressDialog.setMessage("Rendering frame " + percentage + "%");
+                                progressBar.setProgress(percentage);
+                                messageTv.setText("Rendering frame " + percentage + "%");
                             });
                         }
 
                         @Override
                         public void onFinished(File videoFile) {
                             ((Activity) context).runOnUiThread(() -> {
-                                progressDialog.dismiss();
+                                customProgressDialog.dismiss();
                                 lastSavedVideoUri = saveVideoToDownloadsAndGetUri(context, videoFile);
                                 if (lastSavedVideoUri != null) {
                                     Toast.makeText(context, "Video saved to gallery successfully!", Toast.LENGTH_LONG).show();
@@ -224,7 +246,7 @@ public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.ViewHolder
                         @Override
                         public void onError(Exception e) {
                             ((Activity) context).runOnUiThread(() -> {
-                                progressDialog.dismiss();
+                                customProgressDialog.dismiss();
                                 Log.e("VideoGen", "Failed", e);
                                 Toast.makeText(context, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
                             });
@@ -237,15 +259,15 @@ public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.ViewHolder
                         @Override
                         public void onProgress(int percentage) {
                             ((Activity) context).runOnUiThread(() -> {
-                                progressDialog.setProgress(percentage);
-                                progressDialog.setMessage("Rendering frame " + percentage + "%");
+                                progressBar.setProgress(percentage);
+                                messageTv.setText("Rendering frame " + percentage + "%");
                             });
                         }
 
                         @Override
                         public void onFinished(File videoFile) {
                             ((Activity) context).runOnUiThread(() -> {
-                                progressDialog.dismiss();
+                                customProgressDialog.dismiss();
                                 lastSavedVideoUri = saveVideoToDownloadsAndGetUri(context, videoFile);
                                 if (lastSavedVideoUri != null) {
                                     Toast.makeText(context, "Video saved to gallery successfully!", Toast.LENGTH_LONG).show();
@@ -258,7 +280,7 @@ public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.ViewHolder
                         @Override
                         public void onError(Exception e) {
                             ((Activity) context).runOnUiThread(() -> {
-                                progressDialog.dismiss();
+                                customProgressDialog.dismiss();
                                 Log.e("VideoGen", "Failed", e);
                                 Toast.makeText(context, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
                             });
@@ -271,15 +293,15 @@ public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.ViewHolder
                         @Override
                         public void onProgress(int percentage) {
                             ((Activity) context).runOnUiThread(() -> {
-                                progressDialog.setProgress(percentage);
-                                progressDialog.setMessage("Rendering frame " + percentage + "%");
+                                progressBar.setProgress(percentage);
+                                messageTv.setText("Rendering frame " + percentage + "%");
                             });
                         }
 
                         @Override
                         public void onFinished(File videoFile) {
                             ((Activity) context).runOnUiThread(() -> {
-                                progressDialog.dismiss();
+                                customProgressDialog.dismiss();
                                 lastSavedVideoUri = saveVideoToDownloadsAndGetUri(context, videoFile);
                                 if (lastSavedVideoUri != null) {
                                     Toast.makeText(context, "Video saved to gallery successfully!", Toast.LENGTH_LONG).show();
@@ -292,7 +314,7 @@ public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.ViewHolder
                         @Override
                         public void onError(Exception e) {
                             ((Activity) context).runOnUiThread(() -> {
-                                progressDialog.dismiss();
+                                customProgressDialog.dismiss();
                                 Log.e("VideoGen", "Failed", e);
                                 Toast.makeText(context, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
                             });
@@ -306,15 +328,15 @@ public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.ViewHolder
                         @Override
                         public void onProgress(int percentage) {
                             ((Activity) context).runOnUiThread(() -> {
-                                progressDialog.setProgress(percentage);
-                                progressDialog.setMessage("Rendering frame " + percentage + "%");
+                                progressBar.setProgress(percentage);
+                                messageTv.setText("Rendering frame " + percentage + "%");
                             });
                         }
 
                         @Override
                         public void onFinished(File videoFile) {
                             ((Activity) context).runOnUiThread(() -> {
-                                progressDialog.dismiss();
+                                customProgressDialog.dismiss();
                                 lastSavedVideoUri = saveVideoToDownloadsAndGetUri(context, videoFile);
                                 if (lastSavedVideoUri != null) {
                                     Toast.makeText(context, "Video saved to gallery successfully!", Toast.LENGTH_LONG).show();
@@ -327,7 +349,7 @@ public class StatusAdapter extends RecyclerView.Adapter<StatusAdapter.ViewHolder
                         @Override
                         public void onError(Exception e) {
                             ((Activity) context).runOnUiThread(() -> {
-                                progressDialog.dismiss();
+                                customProgressDialog.dismiss();
                                 Log.e("VideoGen", "Failed", e);
                                 Toast.makeText(context, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
                             });

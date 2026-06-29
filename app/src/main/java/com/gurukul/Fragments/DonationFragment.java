@@ -68,17 +68,15 @@ public class DonationFragment extends Fragment {
     }
 
     private void fetchDonations() {
-
         Utils.hideEmptyState(emptyStateLayout, recyclerView);
         progressBar.setVisibility(View.VISIBLE);
-
         Log.d(TAG, "========== API REQUEST ==========");
         Log.d(TAG, "URL: " + API_URL);
-
         StringRequest stringRequest = new StringRequest(
                 Request.Method.GET,
                 API_URL,
                 response -> {
+                    if (!isAdded()) return;
                     progressBar.setVisibility(View.GONE);
                     Log.d(TAG, "========== API RESPONSE ==========");
                     Log.d(TAG, response);
@@ -101,12 +99,10 @@ public class DonationFragment extends Fragment {
                             return;
                         }
 
-                        // Use the correct key: "donations" instead of "data"
                         JSONArray jsonArray = rootObject.getJSONArray("donations");
                         Log.d(TAG, "Total Records: " + jsonArray.length());
 
                         if (jsonArray.length() == 0) {
-                            // Success, but list is empty -> Show No Data UI
                             Utils.showEmptyState(emptyStateLayout, recyclerView,
                                     R.drawable.no_data,
                                     getString(R.string.no_donations_found),
@@ -144,13 +140,15 @@ public class DonationFragment extends Fragment {
                     }
                 },
                 error -> {
+                    if (!isAdded()) return;
+
                     progressBar.setVisibility(View.GONE);
                     Log.e(TAG, "========== API ERROR ==========");
 
-                    // Differentiate between Network Error and Server Error
+
                     if (error instanceof com.android.volley.NoConnectionError || error instanceof com.android.volley.TimeoutError) {
                         Utils.showEmptyState(emptyStateLayout, recyclerView,
-                                android.R.drawable.ic_dialog_dialer, // Replace with your no_internet drawable if you have one
+                                android.R.drawable.ic_dialog_dialer,
                                 getString(R.string.no_internet_connection),
                                 getString(R.string.check_network_settings),
                                 true,
@@ -187,7 +185,11 @@ public class DonationFragment extends Fragment {
             }
         };
 
-        RequestQueue requestQueue = Volley.newRequestQueue(requireContext());
-        requestQueue.add(stringRequest);
+        // Note: Instead of requireContext() here, since this runs synchronously when fetchDonations is called,
+        // it's generally safe. However, checking context is good practice.
+        if (getContext() != null) {
+            RequestQueue requestQueue = Volley.newRequestQueue(getContext());
+            requestQueue.add(stringRequest);
+        }
     }
 }

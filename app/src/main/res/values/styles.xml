@@ -45,7 +45,7 @@
         <item name="android:paddingBottom">16dp</item>
     </style>
     <style name="BottomNavTextStyle" parent="TextAppearance.AppCompat.Caption">
-        <item name="android:textSize">13sp</item> <!-- Change this value as needed -->
+        <item name="android:textSize">13sp</item>
         <item name="android:textColor">@color/primary</item>
         <item name="android:textStyle">normal</item>
 
